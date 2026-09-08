@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Teste Script SharePoint</title>
+  <script src="sharepoint-teste-dados.js"></script>
+</head>
+<body>
+  <h1>Teste Script</h1>
+  <pre id="saida">Carregando...</pre>
+
+  <script>
+    const out = document.getElementById("saida");
+
+    if(window.SHAREPOINT_TESTE_DADOS){
+      out.textContent = JSON.stringify(window.SHAREPOINT_TESTE_DADOS, null, 2);
+    } else {
+      out.textContent = "Erro: o arquivo sharepoint-teste-dados.js nao foi carregado.";
+    }
+  </script>
+</body>
+</html>

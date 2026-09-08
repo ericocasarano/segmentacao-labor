@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Teste Script URL SharePoint</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 32px; color: #111827; }
+    input { width: min(900px, 100%); padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; }
+    button { padding: 10px 14px; border: 1px solid #1d4ed8; background: #2563eb; color: white; border-radius: 6px; cursor: pointer; }
+    pre { background: #f3f4f6; border: 1px solid #d1d5db; padding: 16px; white-space: pre-wrap; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+  </style>
+</head>
+<body>
+  <h1>Teste Script por URL</h1>
+  <p>Cole o link direto do arquivo <strong>sharepoint-teste-dados.js</strong>.</p>
+
+  <div class="row">
+    <input id="scriptUrl" placeholder="https://.../sharepoint-teste-dados.js">
+    <button id="loadBtn">Testar JS</button>
+  </div>
+
+  <pre id="saida">Aguardando link...</pre>
+
+  <script>
+    const out = document.getElementById("saida");
+    const input = document.getElementById("scriptUrl");
+
+    document.getElementById("loadBtn").addEventListener("click", () => {
+      const url = input.value.trim();
+      if(!url){
+        out.textContent = "Cole o link do JS primeiro.";
+        return;
+      }
+
+      window.SHAREPOINT_TESTE_DADOS = null;
+      out.textContent = "Tentando carregar: " + url;
+
+      const script = document.createElement("script");
+      script.src = url;
+      script.onload = () => {
+        if(window.SHAREPOINT_TESTE_DADOS){
+          out.textContent = JSON.stringify(window.SHAREPOINT_TESTE_DADOS, null, 2);
+        } else {
+          out.textContent = "O script carregou, mas nao criou window.SHAREPOINT_TESTE_DADOS.";
+        }
+      };
+      script.onerror = () => {
+        out.textContent = "Erro: o navegador/SharePoint bloqueou ou nao encontrou o arquivo JS.";
+      };
+      document.head.appendChild(script);
+    });
+  </script>
+</body>
+</html>

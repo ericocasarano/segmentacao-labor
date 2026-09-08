@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Teste CSV SharePoint</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 32px; color: #111827; }
+    pre { background: #f3f4f6; border: 1px solid #d1d5db; padding: 16px; white-space: pre-wrap; }
+    input { width: min(900px, 100%); padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; }
+    button { padding: 10px 14px; border: 1px solid #1d4ed8; background: #2563eb; color: white; border-radius: 6px; cursor: pointer; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+    .hint { color: #475569; max-width: 900px; line-height: 1.45; }
+  </style>
+</head>
+<body>
+  <h1>Teste CSV</h1>
+  <p class="hint">
+    Este teste tenta ler o CSV na mesma pasta do HTML. Se o SharePoint abrir o HTML em modo de previa e bloquear caminhos relativos, cole abaixo o link direto do CSV.
+  </p>
+  <div class="row">
+    <input id="csvUrl" placeholder="Cole aqui o link do sharepoint-teste-dados.csv, se o automatico falhar">
+    <button id="loadBtn">Testar CSV</button>
+  </div>
+  <pre id="saida">Carregando...</pre>
+
+  <script>
+    const out = document.getElementById("saida");
+    const input = document.getElementById("csvUrl");
+
+    function parentSharePointUrl(){
+      try {
+        return window.top.location.href;
+      } catch {
+        return "";
+      }
+    }
+
+    function csvUrlFromSharePointPage(){
+      const sourceUrl = parentSharePointUrl() || window.location.href;
+      try {
+        const page = new URL(sourceUrl);
+        const fileId = page.searchParams.get("id") || page.searchParams.get("sourcedoc");
+        if(!fileId) return "";
+        const decoded = decodeURIComponent(fileId);
+        const folder = decoded.slice(0, decoded.lastIndexOf("/") + 1);
+        return page.origin + folder + "sharepoint-teste-dados.csv";
+      } catch {
+        return "";
+      }
+    }
+
+    function loadCsv(url){
+      out.textContent = "Tentando ler: " + url;
+      fetch(url)
+        .then(r => {
+        if(!r.ok) throw new Error("HTTP " + r.status);
+        return r.text();
+        })
+        .then(txt => {
+          out.textContent = txt;
+        })
+        .catch(err => {
+          out.textContent = "Erro: " + err.message + "\n\nSe falhou, abra o arquivo sharepoint-teste-dados.csv no SharePoint, copie o link dele e cole no campo acima.";
+        });
+    }
+
+    document.getElementById("loadBtn").addEventListener("click", () => {
+      if(!input.value.trim()){
+        out.textContent = "Cole o link do CSV primeiro.";
+        return;
+      }
+      loadCsv(input.value.trim());
+    });
+
+    const autoUrl = csvUrlFromSharePointPage();
+    if(autoUrl){
+      input.value = autoUrl;
+      loadCsv(autoUrl);
+    } else {
+      out.textContent = "Nao consegui montar o caminho automatico. Cole o link do sharepoint-teste-dados.csv no campo acima.";
+    }
+  </script>
+</body>
+</html>

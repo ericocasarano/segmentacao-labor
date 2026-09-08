@@ -1,0 +1,25 @@
+# Dados reais de clientes - nunca versionar
+uploads/
+tabela_nova.xlsx
+tabela_nova.xlsx.inspect.ndjson
+apresentacao_evolucao_segmentacao.pptx
+apresentacao_evolucao_segmentacao.pptx.inspect.ndjson
+labor-data.js
+sharepoint-teste-dados.csv
+sharepoint-teste-dados.js
+
+# Publicacoes antigas com dados/credenciais embutidos
+publish/
+publish-sharepoint-data/
+
+# Builds temporarios de skills (docx/xlsx/pptx)
+.docx_build/
+.xlsx_build/
+.presentation_build/
+.agents/
+
+# Diversos
+.thumbnail
+screens/
+*.log
+node_modules/

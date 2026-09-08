@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<script src="labor-data-source.js?v=20260723"></script>
+<style>
+  html,body{margin:0;background:#F4F5FA}
+  *{box-sizing:border-box}
+  ::selection{background:#2850EF;color:#fff}
+  .lbr-scroll::-webkit-scrollbar{height:10px;width:10px}
+  .lbr-scroll::-webkit-scrollbar-thumb{background:#d4d8e8;border-radius:8px}
+  .lbr-fit-table{table-layout:fixed;min-width:0!important}
+  .lbr-fit-table th{white-space:normal!important;line-height:1.15;vertical-align:bottom;padding:11px 8px!important;word-break:normal;letter-spacing:.025em!important;font-size:10px!important}
+  .lbr-fit-table th:nth-child(1),.lbr-fit-table th:nth-child(2){padding-left:14px!important;padding-right:14px!important;text-align:center!important}
+  .lbr-fit-table td:nth-child(1),.lbr-fit-table td:nth-child(2){text-align:center!important}
+  .lbr-fit-table td{padding:9px 5px!important;white-space:normal!important;vertical-align:middle}
+  .lbr-fit-table td:nth-child(1) span,.lbr-fit-table td:nth-child(2) span{white-space:normal;line-height:1.15;text-align:center;max-width:100%}
+  .lbr-fit-table td:nth-child(3),.lbr-fit-table td:nth-child(4){overflow-wrap:anywhere}
+  .lbr-fit-table td:nth-child(5),.lbr-fit-table td:nth-child(6),.lbr-fit-table td:nth-child(7),.lbr-fit-table td:nth-child(8),.lbr-fit-table td:nth-child(9),.lbr-fit-table td:nth-child(10){white-space:nowrap!important}
+  .lbr-window-tip:hover .lbr-window-pop{display:block!important}
+  @keyframes lbrbar{from{width:0}}
+</style>
+</helmet>
+<div style="font-family:'Archivo',system-ui,sans-serif;background:#F4F5FA;min-height:100vh;color:#0B1733;padding:28px 32px 56px">
+  <div style="max-width:1280px;margin:0 auto">
+
+  <sc-if value="{{ dashboardVisible }}" hint-placeholder-val="{{ true }}">
+
+    <header style="background:#fff;border:1px solid #e4e8f4;border-top:4px solid #2850EF;border-radius:16px;margin-bottom:24px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px;box-shadow:0 10px 28px rgba(11,23,51,.06)">
+      <div style="min-width:0">
+        <div style="font-size:10.5px;font-weight:800;color:#2850EF;text-transform:uppercase;letter-spacing:.12em;margin-bottom:7px">Dashboard executivo</div>
+        <h1 style="font-size:30px;font-weight:800;letter-spacing:0;margin:0;line-height:1.05;color:#0B1733">Segmentação de clientes</h1>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:11px">
+          <span style="font-size:12px;font-weight:700;color:#4F5D78;background:#f3f5fb;border:1px solid #e4e8f4;border-radius:999px;padding:6px 10px">Período: últimos 12 meses fechados · {{ analysisPeriod }}</span>
+          <span style="font-size:12px;font-weight:700;color:#4F5D78;background:#f3f5fb;border:1px solid #e4e8f4;border-radius:999px;padding:6px 10px">Tipo de Cliente: Revenda</span>
+        </div>
+        <p style="font-size:11.5px;margin:10px 0 0;color:{{ sourceColor }};font-weight:600">{{ sourceLabel }}</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:18px;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e6e9f2;border-radius:12px;padding:10px 16px;box-shadow:0 6px 18px rgba(11,23,51,.05)">
+          <div style="text-align:right">
+            <div style="font-size:10.5px;color:#6A748F;font-weight:700;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Base total</div>
+            <div style="font-size:22px;font-weight:800;color:#001E50;line-height:1.1;margin-top:3px;white-space:nowrap">{{ totalFmt }}</div>
+          </div>
+          <div style="width:40px;height:40px;border-radius:10px;background:#2850EF;display:flex;align-items:center;justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+        </div>
+        <div style="width:1px;height:52px;background:#dfe3ef"></div>
+        <img src="labor-logo.png" alt="Labor Health Supply" style="height:54px;width:116px;display:block;object-fit:contain">
+      </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav style="display:flex;gap:8px;margin-bottom:18px">
+      <button onClick="{{ goToGeral }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navGeralBorder }};background:{{ navGeralBg }};color:{{ navGeralTxt }}">Visão Geral</button>
+      <button onClick="{{ goToVendedor }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navVendedorBorder }};background:{{ navVendedorBg }};color:{{ navVendedorTxt }}">Visão por Vendedor</button>
+    </nav>
+
+    <sc-if value="{{ viewGeral }}" hint-placeholder-val="{{ true }}">
+
+    <!-- Critérios por cluster -->
+    <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:20px 22px;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <h3 style="font-size: 16px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: .05em; color: #0B1733">CRITÉRIOS PRÉ-DEFINIDOS POR SEGMENTO</h3>
+        
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+        <sc-for list="{{ rules }}" as="r" hint-placeholder-count="5">
+          <div style="border:1px solid {{ r.border }};border-radius:12px;padding:13px 14px;background:{{ r.bgsoft }}">
+            <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block;margin-bottom:11px;background:{{ r.bg }};color:{{ r.txt }};letter-spacing:.03em">{{ r.label }}</span>
+            <sc-for list="{{ r.items }}" as="it" hint-placeholder-count="4">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:11.5px;padding:5px 0;border-bottom:1px solid rgba(11,23,51,0.06)">
+                <span style="color:#6A748F;line-height:1.3">{{ it.k }}</span>
+                <span style="color:#0B1733;font-weight:600;white-space:nowrap;text-align:right">{{ it.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid #eef0f7">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:{{ criteriaBodyMargin }}">
+          <div>
+            <div style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:#6A748F;text-transform:uppercase;letter-spacing:.06em">
+              <span style="width:22px;height:22px;border-radius:7px;background:#eef1fe;color:#2850EF;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7"></path><path d="M4 10V3"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M20 21v-5"></path><path d="M20 12V3"></path><path d="M2 14h4"></path><path d="M10 8h4"></path><path d="M18 16h4"></path></svg>
+              </span>
+              <span>Simulação temporária</span>
+            </div>
+            <div style="font-size:11.5px;color:#8A94AD;margin-top:2px">Altere os critérios e a coluna "Segmentação (Simulação)" recalcula nesta tela. Ao atualizar a página, volta ao padrão.</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button onClick="{{ toggleCriteriaPanel }}" style="font-family:inherit;font-size:11.5px;font-weight:700;color:#0B1733;background:#fff;border:1px solid #dde1ee;border-radius:8px;padding:7px 11px;cursor:pointer;white-space:nowrap">{{ criteriaToggleLabel }}</button>
+            <sc-if value="{{ criteriaOpen }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ resetCriteria }}" style="font-family:inherit;font-size:11.5px;font-weight:700;color:#2850EF;background:#eef1fe;border:none;border-radius:8px;padding:7px 11px;cursor:pointer;white-space:nowrap">Restaurar padrão</button>
+            </sc-if>
+          </div>
+        </div>
+        <sc-if value="{{ criteriaOpen }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <sc-for list="{{ criteriaRows }}" as="c" hint-placeholder-count="3">
+              <div style="border:1px solid #eceef5;border-radius:10px;padding:10px 12px;background:#fafbfe">
+                <span style="font-size:11px;font-weight:800;padding:3px 9px;border-radius:6px;display:inline-block;margin-bottom:9px;background:{{ c.bg }};color:{{ c.txt }};letter-spacing:.03em">{{ c.label }}</span>
+                <div style="display:grid;grid-template-columns:1fr 74px;gap:7px;align-items:center;margin-bottom:6px">
+                  <label style="font-size:11px;color:#6A748F;font-weight:600">Faturamento Médio</label>
+                  <input type="number" value="{{ c.fm }}" onInput="{{ c.onFm }}" style="font-family:inherit;font-size:12px;border:1px solid #dde1ee;border-radius:7px;padding:6px 7px;text-align:right;color:#0B1733;width:100%">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 74px;gap:7px;align-items:center;margin-bottom:6px">
+                  <label style="font-size:11px;color:#6A748F;font-weight:600">Cash Margin Média</label>
+                  <input type="number" value="{{ c.mg }}" onInput="{{ c.onMg }}" style="font-family:inherit;font-size:12px;border:1px solid #dde1ee;border-radius:7px;padding:6px 7px;text-align:right;color:#0B1733;width:100%">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 74px;gap:7px;align-items:center;margin-bottom:6px">
+                  <label style="font-size:11px;color:#6A748F;font-weight:600">Média SKUs</label>
+                  <input type="number" value="{{ c.sk }}" onInput="{{ c.onSk }}" style="font-family:inherit;font-size:12px;border:1px solid #dde1ee;border-radius:7px;padding:6px 7px;text-align:right;color:#0B1733;width:100%">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 74px;gap:7px;align-items:center">
+                  <label style="font-size:11px;color:#6A748F;font-weight:600">Meses c/ compra</label>
+                  <input type="number" value="{{ c.mc }}" onInput="{{ c.onMc }}" style="font-family:inherit;font-size:12px;border:1px solid #dde1ee;border-radius:7px;padding:6px 7px;text-align:right;color:#0B1733;width:100%">
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+
+    <!-- Cards de resumo -->
+    <section style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px">
+      <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+        <div onClick="{{ c.onClick }}" style="{{ c.cardStyle }}">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <span style="font-size: 14px; font-weight: 700; padding: 3px 10px; border-radius: 6px; display: inline-block; background: {{ c.bg }}; color: {{ c.txt }}; text-transform: uppercase; letter-spacing: .04em">{{ c.label }}</span>
+            <span style="width:9px;height:9px;border-radius:50%;background:{{ c.color }};box-shadow:0 0 0 4px {{ c.ring }}"></span>
+          </div>
+          <div style="font-size:30px;font-weight:800;line-height:1;letter-spacing:-0.02em;color:{{ c.color }}">{{ c.atual }}</div>
+          <sc-if value="{{ c.trendMeaningful }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:11.5px;color:{{ c.deltaColor }};margin-top:4px;font-weight:700">{{ c.deltaLabel }}</div>
+            <div style="font-size:11px;color:#8A94AD;margin-top:3px;font-weight:600">{{ c.flowLabel }}</div>
+          </sc-if>
+          <div style="margin-top:13px;padding-top:12px;border-top:1px solid rgba(11,23,51,0.07)">
+            <div style="display:flex;align-items:center;gap:7px;font-size:11px">
+              <div class="lbr-window-tip" style="width:82px;color:#6A748F;flex-shrink:0;font-weight:500;position:relative;cursor:help">
+                J1 - Atual
+                <div class="lbr-window-pop" style="display:none;position:absolute;left:0;bottom:20px;z-index:20;width:210px;background:#fff;border:1px solid #dfe3ef;border-radius:12px;box-shadow:0 14px 34px rgba(11,23,51,.16);padding:10px 12px">
+                  <div style="font-size:10.5px;font-weight:800;color:#0B1733;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">J1 - Atual</div>
+                  <div style="font-size:11px;color:#6A748F;line-height:1.3">{{ c.j1Period }}</div>
+                </div>
+              </div>
+              <div style="flex:1;background:#eef0f7;border-radius:4px;height:7px;overflow:hidden"><div style="height:100%;border-radius:4px;width:{{ c.atualW }};background:#b9c0d4"></div></div>
+              <div style="width:34px;text-align:right;color:#0B1733;font-weight:700;flex-shrink:0">{{ c.atual }}</div>
+            </div>
+            <sc-if value="{{ c.trendMeaningful }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;align-items:center;gap:7px;margin-top:7px;font-size:11px">
+                <div class="lbr-window-tip" style="width:82px;color:#6A748F;flex-shrink:0;font-weight:500;position:relative;cursor:help">
+                  J2 - Anterior
+                  <div class="lbr-window-pop" style="display:none;position:absolute;left:0;bottom:20px;z-index:20;width:210px;background:#fff;border:1px solid #dfe3ef;border-radius:12px;box-shadow:0 14px 34px rgba(11,23,51,.16);padding:10px 12px">
+                    <div style="font-size:10.5px;font-weight:800;color:#0B1733;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">J2 - Anterior</div>
+                    <div style="font-size:11px;color:#6A748F;line-height:1.3">{{ c.j2Period }}</div>
+                  </div>
+                </div>
+                <div style="flex:1;background:#eef0f7;border-radius:4px;height:7px;overflow:hidden"><div style="height:100%;border-radius:4px;width:{{ c.j2W }};background:#d6dbe8"></div></div>
+                <div style="width:34px;text-align:right;color:#0B1733;font-weight:700;flex-shrink:0">{{ c.j2 }}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ simulationActive }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:7px;margin-top:7px;font-size:11px">
+                <div style="width:82px;color:#6A748F;flex-shrink:0;font-weight:500">Simulação</div>
+                <div style="flex:1;background:#eef0f7;border-radius:4px;height:7px;overflow:hidden"><div style="height:100%;border-radius:4px;width:{{ c.autoNoSkuW }};background:{{ c.color }}"></div></div>
+                <div style="width:34px;text-align:right;color:#0B1733;font-weight:700;flex-shrink:0">{{ c.autoNoSku }}</div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <!-- Filtros -->
+    <section style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:16px 18px;margin-bottom:14px">
+      <div style="flex:2;min-width:220px">
+        <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Buscar cliente</label>
+        <div style="position:relative">
+          <svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa3bd" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <input value="{{ q.search }}" onInput="{{ onSearch }}" placeholder="Nome ou ID do cliente…" style="font-family:inherit;font-size:13px;padding:9px 12px 9px 32px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none">
+        </div>
+      </div>
+      <div style="flex:1;min-width:150px">
+        <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Padrão</label>
+        <select value="{{ q.fAtual }}" onChange="{{ onFAtual }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
+          <option value="">Todos</option><option>DIAMOND</option><option>PLATINUM</option><option>GOLD</option><option>STANDARD</option>
+        </select>
+      </div>
+      <sc-if value="{{ simulationActive }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-width:170px">
+          <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Simulação</label>
+          <select value="{{ q.fAutoNoSku }}" onChange="{{ onFAutoNoSku }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
+            <option value="">Todos</option><option>DIAMOND</option><option>PLATINUM</option><option>GOLD</option><option>STANDARD</option>
+          </select>
+        </div>
+      </sc-if>
+      <div style="flex:1;min-width:150px">
+        <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Direção (J2 → J1)</label>
+        <select value="{{ q.fDir }}" onChange="{{ onFDir }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
+          <option value="">Todos</option><option value="up">Subiu de segmento</option><option value="down">Desceu de segmento</option><option value="eq">Sem mudança</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:180px">
+        <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Critério da mudança (J2 → J1)</label>
+        <select value="{{ q.fReason }}" onChange="{{ onFReason }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
+          <option value="">Todos</option><option value="fm">Faturamento</option><option value="mg">Cash Margin</option><option value="sk">Média SKUs</option><option value="mc">Meses c/ compra</option><option value="multi">Mais de um critério</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:150px">
+        <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Vendedor</label>
+        <select value="{{ q.fVend }}" onChange="{{ onFVend }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
+          <option value="">Todos</option>
+          <sc-for list="{{ vendedores }}" as="v" hint-placeholder-count="4"><option value="{{ v }}">{{ v }}</option></sc-for>
+        </select>
+      </div>
+    </section>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:0 2px 10px">
+      <div style="font-size:12.5px;color:#6A748F"><span style="color:#0B1733;font-weight:700">{{ countLabel }}</span> clientes encontrados</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button onClick="{{ exportRows }}" disabled="{{ exportDisabled }}" style="font-family:inherit;font-size:11.5px;font-weight:700;color:#0B1733;background:#fff;border:1px solid #dde1ee;border-radius:9px;padding:7px 11px;display:inline-flex;align-items:center;gap:7px;cursor:pointer;opacity:{{ exportOpacity }}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2850EF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+          Exportar tabela
+        </button>
+        <div class="lbr-window-tip" style="position:relative;display:inline-flex;align-items:center" title="">
+          <button style="font-family:inherit;width:30px;height:30px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#2850EF;display:inline-flex;align-items:center;justify-content:center;cursor:help">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 17h.01"></path><path d="M9.8 9a2.3 2.3 0 0 1 4.45.8c0 1.7-2.25 1.95-2.25 3.45"></path></svg>
+          </button>
+          <div class="lbr-window-pop" style="display:none;position:absolute;right:0;top:36px;z-index:20;width:360px;background:#fff;border:1px solid #dfe3ef;border-radius:12px;box-shadow:0 14px 34px rgba(11,23,51,.16);padding:12px">
+            <div style="font-size:11px;font-weight:800;color:#0B1733;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Legenda das janelas</div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px 10px">
+              <sc-for list="{{ windowLegendAsc }}" as="w" hint-placeholder-count="7">
+                <div style="font-size:11px;color:#6A748F;line-height:1.2"><span style="color:#0B1733;font-weight:800">{{ w.short }}</span>: {{ w.period }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <sc-if value="{{ hasActiveFilter }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ clearFilters }}" style="font-family:inherit;font-size:11.5px;font-weight:600;color:#2850EF;background:#eef1fe;border:none;border-radius:8px;padding:6px 12px;cursor:pointer">Limpar filtros</button>
+        </sc-if>
+      </div>
+    </div>
+
+    <!-- Tabela -->
+    <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;overflow:hidden">
+      <div class="lbr-scroll" style="overflow-x:auto">
+        <table class="lbr-fit-table" style="width:100%;border-collapse:collapse;font-size:11.5px;min-width:0">
+          <colgroup>
+            <col style="width:10%">
+            <sc-if value="{{ simulationActive }}" hint-placeholder-val="{{ false }}"><col style="width:11%"></sc-if>
+            <col style="width:15%">
+            <col style="width:10%">
+            <col style="width:12%">
+            <col style="width:12%">
+            <col style="width:9%">
+            <col style="width:8%">
+            <col style="width:10%">
+            <col style="width:3%">
+          </colgroup>
+          <thead>
+            <tr style="background:#fafbfe">
+              <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:center;padding:13px 14px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Segmentação</span><span style="display:{{ segmentHeaderSubDisplay }};margin-top:2px">(Padrão)</span></th>
+              <sc-if value="{{ simulationActive }}" hint-placeholder-val="{{ false }}">
+                <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:center;padding:13px 14px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Segmentação</span><span style="display:block;margin-top:2px">(Simulação)</span></th>
+              </sc-if>
+              <th onClick="{{ sortNo }}" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:left;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;cursor:pointer;text-transform:uppercase;letter-spacing:.04em"><span style="display:inline-flex;align-items:center;gap:3px">Cliente <span>{{ caretNo }}</span></span></th>
+              <th onClick="{{ sortVd }}" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:left;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;cursor:pointer;text-transform:uppercase;letter-spacing:.04em"><span style="display:inline-flex;align-items:center;gap:3px">Vendedor <span>{{ caretVd }}</span></span></th>
+              <th onClick="{{ sortFm }}" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:right;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;cursor:pointer;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Fat. Médio&nbsp;{{ caretFm }}</span><span style="display:block;margin-top:2px">Últ. 12 meses</span></th>
+              <th onClick="{{ sortMg }}" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:right;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;cursor:pointer;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Margem (R$)</span><span style="display:block">Média&nbsp;{{ caretMg }}</span><span style="display:block;margin-top:2px">Últ. 12 meses</span></th>
+              <th onClick="{{ sortMb }}" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:right;padding:13px 12px;border-bottom:1px solid #eceef5;white-space:nowrap;cursor:pointer;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Margem %&nbsp;{{ caretMb }}</span><span style="display:block;margin-top:2px">Últ. 12 meses</span></th>
+              <th onClick="{{ sortSk }}" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:right;padding:13px 12px;border-bottom:1px solid #eceef5;white-space:nowrap;cursor:pointer;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Média SKUs&nbsp;{{ caretSk }}</span><span style="display:block;margin-top:2px">Últ. 12 meses</span></th>
+              <th onClick="{{ sortMc }}" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:right;padding:13px 12px;border-bottom:1px solid #eceef5;white-space:nowrap;cursor:pointer;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Meses c/ Compra&nbsp;{{ caretMc }}</span><span style="display:block;margin-top:2px">Últ. 12 meses</span></th>
+              <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:center;padding:13px 8px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em">Evol.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ pageRows }}" as="r" hint-placeholder-count="12">
+              <tr style="border-bottom:1px solid #f1f3f9">
+                <td style="padding:11px 12px;white-space:nowrap;text-align:center"><span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:{{ r.naBg }};color:{{ r.naTxt }}">{{ r.na }}</span></td>
+                <sc-if value="{{ simulationActive }}" hint-placeholder-val="{{ false }}">
+                  <td style="padding:11px 12px;white-space:nowrap;text-align:center"><span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:{{ r.criBg }};color:{{ r.criTxt }}">{{ r.cri }}</span></td>
+                </sc-if>
+                <td style="padding:11px 16px;white-space:nowrap">
+                  <div style="font-weight:600;color:#0B1733">{{ r.no }}</div>
+                  <div style="font-size:11px;color:#9aa3bd;margin-top:1px">{{ r.sub }}</div>
+                </td>
+                <td style="padding:11px 16px;white-space:nowrap;color:#6A748F;font-size:12px">{{ r.vd }}</td>
+                <td style="padding:11px 16px;white-space:nowrap;text-align:right;font-weight:600;color:#0B1733">
+                  <span>{{ r.fmFmt }}</span>
+                  <span style="display:block;margin-top:2px;font-size:10px;font-weight:800;color:{{ r.fmDeltaColor }}">{{ r.fmDelta }}</span>
+                </td>
+                <td style="padding:11px 16px;white-space:nowrap;text-align:right;font-weight:600;color:#0B1733">
+                  <span>{{ r.mgFmt }}</span>
+                  <span style="display:block;margin-top:2px;font-size:10px;font-weight:800;color:{{ r.mgDeltaColor }}">{{ r.mgDelta }}</span>
+                </td>
+                <td style="padding:11px 12px;white-space:nowrap;text-align:right;color:#0B1733">
+                  <span>{{ r.mbFmt }}</span>
+                  <span style="display:block;margin-top:2px;font-size:10px;font-weight:800;color:{{ r.mbDeltaColor }}">{{ r.mbDelta }}</span>
+                </td>
+                <td style="padding:11px 12px;white-space:nowrap;text-align:right;color:#0B1733">
+                  <span>{{ r.skFmt }}</span>
+                  <span style="display:block;margin-top:2px;font-size:10px;font-weight:800;color:{{ r.skDeltaColor }}">{{ r.skDelta }}</span>
+                </td>
+                <td style="padding:11px 12px;white-space:nowrap;text-align:right;color:#0B1733">
+                  <span>{{ r.mc }}</span>
+                  <span style="display:block;margin-top:2px;font-size:10px;font-weight:800;color:{{ r.mcDeltaColor }}">{{ r.mcDelta }}</span>
+                </td>
+                <td style="padding:11px 8px;white-space:nowrap;text-align:center">
+                  <button onClick="{{ r.openTrend }}" title="Ver evolução do cliente" style="font-family:inherit;border:1px solid #dde1ee;background:#fff;color:#2850EF;border-radius:8px;padding:5px 8px;cursor:pointer;font-size:12px;font-weight:800;line-height:1">↗</button>
+                </td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:13px 18px;justify-content:flex-end;font-size:12.5px;color:#6A748F;border-top:1px solid #eceef5;background:#fafbfe">
+        <span style="margin-right:auto;color:#9aa3bd">{{ rangeLabel }}</span>
+        <span>{{ pageInfo }}</span>
+        <button onClick="{{ prevPage }}" disabled="{{ prevDisabled }}" style="font-family:inherit;padding:6px 13px;border-radius:8px;border:1px solid #dde1ee;background:#fff;color:#0B1733;cursor:pointer;font-size:12px;font-weight:600;opacity:{{ prevOpacity }}">← anterior</button>
+        <button onClick="{{ nextPage }}" disabled="{{ nextDisabled }}" style="font-family:inherit;padding:6px 13px;border-radius:8px;border:1px solid #dde1ee;background:#fff;color:#0B1733;cursor:pointer;font-size:12px;font-weight:600;opacity:{{ nextOpacity }}">próximo →</button>
+      </div>
+    </section>
+
+    </sc-if>
+
+    <sc-if value="{{ viewVendedor }}" hint-placeholder-val="{{ false }}">
+
+    <!-- Critério com mais impacto -->
+    <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:20px 22px;margin-bottom:18px">
+      <h3 style="font-size:16px;font-weight:700;margin:0 0 4px;text-transform:uppercase;letter-spacing:.05em;color:#0B1733">Critério com mais impacto (J2 → J1)</h3>
+      <div style="font-size:11.5px;color:#8A94AD;margin-bottom:16px">Entre os {{ vendCountLabel }} clientes que mudaram de segmento na última janela fechada, participação de cada critério na mudança.</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ criteriaImpact }}" as="ci" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:150px;flex-shrink:0;font-size:12.5px;font-weight:700;color:#0B1733">{{ ci.label }}</div>
+            <div style="flex:1;background:#eef0f7;border-radius:5px;height:12px;overflow:hidden"><div style="height:100%;border-radius:5px;width:{{ ci.pctW }};background:#2850EF"></div></div>
+            <div style="width:96px;flex-shrink:0;text-align:right;font-size:12.5px;font-weight:700;color:#0B1733">{{ ci.count }} · {{ ci.pct }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- Vendedores -->
+    <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;overflow:hidden;margin-bottom:18px">
+      <div style="padding:16px 18px;border-bottom:1px solid #eceef5;display:flex;align-items:center;justify-content:space-between">
+        <h3 style="font-size:16px;font-weight:700;margin:0;text-transform:uppercase;letter-spacing:.05em;color:#0B1733">Segmentação por vendedor</h3>
+        <span style="font-size:12px;color:#8A94AD">Clique num vendedor para ver a carteira na Visão Geral</span>
+      </div>
+      <div class="lbr-scroll" style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;white-space:nowrap">
+          <thead>
+            <tr style="background:#fafbfe;border-bottom:1px solid #eceef5">
+              <th onClick="{{ sortVendVd }}" style="cursor:pointer;text-align:left;padding:11px 16px;font-size:10.5px;font-weight:700;color:#6A748F;text-transform:uppercase;letter-spacing:.04em">Vendedor <span style="color:#b9c0d4">{{ caretVendVd }}</span></th>
+              <th onClick="{{ sortVendTotal }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#6A748F;text-transform:uppercase;letter-spacing:.04em">Total <span style="color:#b9c0d4">{{ caretVendTotal }}</span></th>
+              <th onClick="{{ sortVendDiamond }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#6A748F;text-transform:uppercase;letter-spacing:.04em">Diamond <span style="color:#b9c0d4">{{ caretVendDiamond }}</span></th>
+              <th onClick="{{ sortVendPlatinum }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#6A748F;text-transform:uppercase;letter-spacing:.04em">Platinum <span style="color:#b9c0d4">{{ caretVendPlatinum }}</span></th>
+              <th onClick="{{ sortVendGold }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#6A748F;text-transform:uppercase;letter-spacing:.04em">Gold <span style="color:#b9c0d4">{{ caretVendGold }}</span></th>
+              <th onClick="{{ sortVendStandard }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#6A748F;text-transform:uppercase;letter-spacing:.04em">Standard <span style="color:#b9c0d4">{{ caretVendStandard }}</span></th>
+              <th onClick="{{ sortVendUp }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#1F9E5A;text-transform:uppercase;letter-spacing:.04em">Subiu <span style="color:#bcdfcb">{{ caretVendUp }}</span></th>
+              <th onClick="{{ sortVendDown }}" style="cursor:pointer;text-align:right;padding:11px 16px;font-size:10.5px;font-weight:700;color:#C0492A;text-transform:uppercase;letter-spacing:.04em">Desceu <span style="color:#e6bcac">{{ caretVendDown }}</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ vendorRows }}" as="v" hint-placeholder-count="8">
+              <tr onClick="{{ v.onClick }}" style="border-bottom:1px solid #f1f3f9;cursor:pointer">
+                <td style="padding:11px 16px;font-weight:600;color:#0B1733">{{ v.vd }}</td>
+                <td style="padding:11px 12px;text-align:right;color:#0B1733">{{ v.total }}</td>
+                <td style="padding:11px 12px;text-align:right;color:#0B1733">{{ v.diamond }}</td>
+                <td style="padding:11px 12px;text-align:right;color:#0B1733">{{ v.platinum }}</td>
+                <td style="padding:11px 12px;text-align:right;color:#0B1733">{{ v.gold }}</td>
+                <td style="padding:11px 12px;text-align:right;color:#0B1733">{{ v.standard }}</td>
+                <td style="padding:11px 12px;text-align:right;font-weight:700;color:{{ v.upColor }}">{{ v.up }}</td>
+                <td style="padding:11px 16px;text-align:right;font-weight:700;color:{{ v.downColor }}">{{ v.down }}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    </sc-if>
+
+    <sc-if value="{{ trendOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeTrend }}" style="position:fixed;inset:0;background:rgba(11,23,51,.38);z-index:50;display:flex;align-items:center;justify-content:center;padding:4px">
+        <div onClick="{{ stopClick }}" style="background:#fff;border:1px solid #dfe3ef;border-radius:16px;width:min(1200px,99vw);max-height:99vh;overflow:auto;box-shadow:0 22px 70px rgba(11,23,51,.24)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid #eceef5">
+            <div style="min-width:0">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                <span title="{{ trendSegment }}" style="width:28px;height:28px;border-radius:9px;background:{{ trendSegmentBg }};color:{{ trendSegmentTxt }};display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </span>
+                <div style="font-size:17px;font-weight:800;color:#0B1733;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ trendTitle }}</div>
+              </div>
+              <div style="font-size:12px;color:#8A94AD;margin-top:3px">{{ trendSubtitle }}</div>
+            </div>
+            <button onClick="{{ closeTrend }}" style="font-family:inherit;border:1px solid #dde1ee;background:#fff;color:#0B1733;border-radius:9px;width:32px;height:32px;cursor:pointer;font-size:18px;line-height:1">×</button>
+          </div>
+          <div style="padding:12px 18px 0">
+            <div style="border:1px solid #eceef5;border-radius:12px;background:#fafbfe;padding:12px 14px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+                <div>
+                  <div style="font-size:12px;font-weight:800;color:#0B1733">Evolução da segmentação</div>
+                  <div style="font-size:11px;color:#8A94AD;margin-top:2px">Critério da simulação atual · histórico J7 a J1</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+                <sc-for list="{{ trendLevels }}" as="l" hint-placeholder-count="7">
+                  <div style="text-align:center;min-width:0">
+                    <div style="font-size:10px;color:#8A94AD;font-weight:800;margin-bottom:5px">{{ l.j }}</div>
+                    <span style="display:inline-block;max-width:100%;padding:4px 8px;border-radius:7px;font-size:10.5px;font-weight:800;line-height:1.1;background:{{ l.bg }};color:{{ l.txt }}">{{ l.level }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="margin-top:10px;padding-top:10px;border-top:1px solid #eceef5;display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+                <sc-for list="{{ windowLegend }}" as="w" hint-placeholder-count="7">
+                  <div style="text-align:center;min-width:0;font-size:10px;line-height:1.2;color:#6A748F">
+                    <div style="font-weight:800;color:#0B1733">{{ w.short }}</div>
+                    <div>{{ w.period }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="padding:18px 18px 20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px">
+            <sc-for list="{{ trendCards }}" as="g" hint-placeholder-count="5">
+              <div style="border:1px solid #eceef5;border-radius:12px;padding:16px;background:#fafbfe;min-width:0">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px">
+                  <div>
+                    <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#0B1733;line-height:1.1">
+                      <span style="width:22px;height:22px;border-radius:7px;background:#eef1f7;color:#4F5D78;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <sc-for list="{{ g.iconPaths }}" as="p" hint-placeholder-count="3"><path d="{{ p }}"></path></sc-for>
+                        </svg>
+                      </span>
+                      <span>{{ g.title }}</span>
+                      <span style="display:{{ g.ruleDisplay }};font-size:10px;font-weight:500;color:#8A94AD;white-space:nowrap">
+                        <span style="font-weight:800">G:</span> {{ g.ruleGold }}
+                        <span style="display:inline-block;width:12px"></span>|<span style="display:inline-block;width:12px"></span>
+                        <span style="font-weight:800">P:</span> {{ g.rulePlatinum }}
+                        <span style="display:inline-block;width:12px"></span>|<span style="display:inline-block;width:12px"></span>
+                        <span style="font-weight:800">D:</span> {{ g.ruleDiamond }}
+                      </span>
+                    </div>
+                  </div>
+                  <div style="font-size:11px;font-weight:800;color:{{ g.deltaColor }};white-space:nowrap"><span style="color:#8A94AD">J1 vs J2:</span> {{ g.delta }}</div>
+                </div>
+                <div style="position:relative;height:158px">
+                  <svg viewBox="0 0 520 108" style="width:100%;height:124px;display:block;overflow:visible">
+                    <polyline points="{{ g.grid1 }}" fill="none" stroke="#eef1f7" stroke-width="1"></polyline>
+                    <polyline points="{{ g.grid2 }}" fill="none" stroke="#eef1f7" stroke-width="1"></polyline>
+                    <polyline points="{{ g.points }}" fill="none" stroke="{{ g.color }}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                    <sc-for list="{{ g.dots }}" as="d" hint-placeholder-count="7">
+                      <circle cx="{{ d.x }}" cy="{{ d.y }}" r="3.4" fill="#fff" stroke="{{ g.color }}" stroke-width="1.9"></circle>
+                    </sc-for>
+                  </svg>
+                  <sc-for list="{{ g.values }}" as="v" hint-placeholder-count="7">
+                    <div style="position:absolute;left:{{ v.left }};top:{{ v.top }};transform:translate(-50%,-100%);font-size:10px;font-weight:800;color:#0B1733;line-height:1.1;white-space:nowrap;background:rgb(238 241 247 / 74%);padding:4px 5px;border-radius:5px;text-align:center">
+                      <div>{{ v.t }}</div>
+                      <div style="display:{{ v.subDisplay }};margin-top:3px;font-size:9px;font-weight:700;color:#6A748F">{{ v.sub }}</div>
+                    </div>
+                  </sc-for>
+                  <sc-for list="{{ g.labels }}" as="l" hint-placeholder-count="7">
+                    <div style="position:absolute;left:{{ l.left }};top:{{ l.top }};transform:translate(-50%,0);font-size:10px;font-weight:800;color:#8A94AD;line-height:1;white-space:nowrap;background:#fafbfe;padding:1px 3px;border-radius:4px">{{ l.t }}</div>
+                  </sc-for>
+                  <sc-for list="{{ g.segments }}" as="s" hint-placeholder-count="7">
+                    <div style="position:absolute;left:{{ s.left }};top:{{ s.top }};transform:translate(-50%,0);min-width:16px;height:16px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;background:{{ s.bg }};color:{{ s.txt }};border:{{ s.border }}">{{ s.initial }}</div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </sc-if>
+
+  <sc-if value="{{ noAccess }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:radial-gradient(120% 120% at 50% 0%, #EDF1FA 0%, #DEE4F2 100%);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100">
+      <div style="background:#fff;border:1px solid #e4e8f4;border-radius:20px;max-width:440px;width:100%;padding:36px 32px;text-align:center;box-shadow:0 20px 60px rgba(11,23,51,.12)">
+        <div style="font-size:40px;margin-bottom:14px">😞</div>
+        <div style="font-size:19px;font-weight:800;color:#0B1733;margin-bottom:10px">Que pena! Você não tem acesso a esses dados</div>
+        <div style="font-size:13.5px;color:#6A748F;line-height:1.5;margin-bottom:24px">Este painel contém informações comerciais de uso interno. Para visualizar a Segmentação de Clientes, é necessário estar autenticado com sua conta corporativa Microsoft.</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button onClick="{{ recarregarPagina }}" style="font-family:inherit;font-size:13px;font-weight:700;border-radius:10px;padding:10px 18px;cursor:pointer;border:1px solid #2850EF;background:#2850EF;color:#fff">Recarregar página</button>
+          <button onClick="{{ dismissNoAccess }}" style="font-family:inherit;font-size:13px;font-weight:700;border-radius:10px;padding:10px 18px;cursor:pointer;border:1px solid #dde1ee;background:#fff;color:#0B1733">Entendi</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1340,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { view:'geral', search:'', fAutoNoSku:'', fAtual:'', fDir:'', fReason:'', fVend:'', sortCol:'fm', sortDir:-1, vendSortCol:'total', vendSortDir:-1, page:0, sourceLabel:'Carregando fonte de dados...', sourceIsError:false, criteria:null, criteriaOpen:false, trendRow:null, dashboardVisible:false, noAccess:false };
+
+  PER = 30;
+  ORDER = {DIAMOND:4,PLATINUM:3,GOLD:2,STANDARD:1,'SEM SEGMENTAÇÃO':0};
+  // Paleta de níveis alinhada à marca Labor
+  COLOR = {DIAMOND:'rgb(11 51 221)',PLATINUM:'rgb(0, 30, 81)',GOLD:'rgb(185 115 7)',STANDARD:'rgb(98 71 71)','SEM SEGMENTAÇÃO':'rgb(142 149 167)'};
+  BG    = {DIAMOND:'rgb(232 237 255)',PLATINUM:'rgb(228, 233, 245)',GOLD:'rgb(253 237 209)',STANDARD:'rgb(237 234 229)','SEM SEGMENTAÇÃO':'rgb(240 240 241)'};
+  TXT   = {DIAMOND:'rgb(11 51 221)',PLATINUM:'rgb(0, 30, 81)',GOLD:'rgb(185 115 7)',STANDARD:'rgb(98 71 71)','SEM SEGMENTAÇÃO':'rgb(142 149 167)'};
+  RING  = {DIAMOND:'#dfe5fd',PLATINUM:'#d4dbec',GOLD:'#f1e2c6',STANDARD:'#e4e7f0','SEM SEGMENTAÇÃO':'#e4e7f0'};
+  LEVELS = ['STANDARD','GOLD','PLATINUM','DIAMOND'];
+  DEFAULT_CRITERIA = {DIAMOND:{fm:350000,mg:135000,mc:10,sk:7},PLATINUM:{fm:25000,mg:6300,mc:9,sk:5},GOLD:{fm:9500,mg:2300,mc:6,sk:3}};
+
+  get data(){ return (window.LABOR_DASH || {RAW:[],COUNTS:{auto:{},autoNoSku:{},atual:{},total:0}}); }
+
+  fmtBRL(v){ return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}).format(v||0); }
+  fmtInt(v){ return new Intl.NumberFormat('pt-BR').format(v||0); }
+  fmtPct(v){ return (Number(v)||0).toFixed(1).replace('.', ',') + '%'; }
+  criteria(){ return this.state.criteria || this.DEFAULT_CRITERIA; }
+
+  matchesFilters(r, s, includeAtual){
+    const q = s.search.toLowerCase();
+    if(q && !r.no.toLowerCase().includes(q) && !r.id.includes(q)) return false;
+    if(s.fAutoNoSku && this.criterioCriado(r)!==s.fAutoNoSku) return false;
+    if(includeAtual && s.fAtual && this.criterioPadrao(r)!==s.fAtual) return false;
+    if(s.fVend && r.vd!==s.fVend) return false;
+    if(s.fDir && this.windowDirection(r)!==s.fDir) return false;
+    if(s.fReason && !this.matchesWindowChangeReason(r, s.fReason)) return false;
+    return true;
+  }
+
+  filteredSorted(){
+    const s = this.state;
+    let rows = this.data.RAW.filter(r=>this.matchesFilters(r, s, true));
+    const {sortCol,sortDir} = s;
+    rows.sort((a,b)=>{ let va=a[sortCol],vb=b[sortCol];
+      if(typeof va==='string') return sortDir*va.localeCompare(vb || '');
+      return sortDir*(va-vb); });
+    return rows;
+  }
+
+  filteredForCards(){
+    const s = this.state;
+    return this.data.RAW.filter(r=>this.matchesFilters(r, s, false));
+  }
+
+  setFilter(patch){ this.setState({...patch, page:0}); }
+
+  renderVals(){
+    const C = this.data.COUNTS;
+    const total = C.total || this.data.RAW.length;
+    const crit = this.criteria();
+    const cardRows = this.filteredForCards();
+    const createdCounts = this.LEVELS.reduce((acc,l)=>({...acc,[l]:0}),{});
+    cardRows.forEach(r=>{ const l=this.criterioCriado(r); createdCounts[l]=(createdCounts[l]||0)+1; });
+    const padraoCounts = this.defaultCounts(cardRows);
+    const simulationActive = this.criteriaActiveFor(this.criteria());
+    const j2Counts = this.LEVELS.reduce((acc,l)=>({...acc,[l]:0}),{});
+    cardRows.forEach(r=>{ const l = this.criterioJ2(r); j2Counts[l] = (j2Counts[l] || 0) + 1; });
+    const windows = this.windowLegend();
+    const j1Period = windows.find(w => w.short === 'J1')?.period || '';
+    const j2Period = windows.find(w => w.short === 'J2')?.period || '';
+    const rules = [
+      {label:'STANDARD', items:[{k:'Faturamento Médio',v:'—'},{k:'Cash Margin Média',v:'—'},{k:'Média SKUs',v:'—'},{k:'Meses c/ compra',v:'—'}]},
+      {label:'GOLD', items:[{k:'Faturamento Médio',v:'≥ '+this.fmtBRL(crit.GOLD.fm)},{k:'Cash Margin Média',v:'≥ '+this.fmtBRL(crit.GOLD.mg)},{k:'Média SKUs',v:'≥ '+crit.GOLD.sk},{k:'Meses c/ compra',v:'≥ '+crit.GOLD.mc}]},
+      {label:'PLATINUM', items:[{k:'Faturamento Médio',v:'≥ '+this.fmtBRL(crit.PLATINUM.fm)},{k:'Cash Margin Média',v:'≥ '+this.fmtBRL(crit.PLATINUM.mg)},{k:'Média SKUs',v:'≥ '+crit.PLATINUM.sk},{k:'Meses c/ compra',v:'≥ '+crit.PLATINUM.mc}]},
+      {label:'DIAMOND', items:[{k:'Faturamento Médio',v:'≥ '+this.fmtBRL(crit.DIAMOND.fm)},{k:'Cash Margin Média',v:'≥ '+this.fmtBRL(crit.DIAMOND.mg)},{k:'Média SKUs',v:'≥ '+crit.DIAMOND.sk},{k:'Meses c/ compra',v:'≥ '+crit.DIAMOND.mc}]},
+    ].map(r=>({...r, bg:this.BG[r.label], txt:this.TXT[r.label], border:'#eceef5', bgsoft:'#fff'}));
+    const criteriaRows = ['GOLD','PLATINUM','DIAMOND'].map(level=>({
+      label:level, bg:this.BG[level], txt:this.TXT[level],
+      fm:crit[level].fm, mg:crit[level].mg ?? 0, mc:crit[level].mc, sk:crit[level].sk,
+      onFm:(e)=>this.updateCriteria(level,'fm',e.target.value),
+      onMg:(e)=>this.updateCriteria(level,'mg',e.target.value),
+      onMc:(e)=>this.updateCriteria(level,'mc',e.target.value),
+      onSk:(e)=>this.updateCriteria(level,'sk',e.target.value)
+    }));
+
+    const trendMeaningful = !(this.state.fDir || this.state.fReason);
+    const cards = this.LEVELS.map(l=>{
+      const auto = C.auto[l]||0, atual = padraoCounts[l]||0, autoNoSku = createdCounts[l]||0, j2 = j2Counts[l]||0;
+      const mx = Math.max(auto,atual,j2,simulationActive ? autoNoSku : 0,1);
+      const active = this.state.fAtual===l;
+      const chegaram = cardRows.filter(r => this.criterioPadrao(r)===l && this.criterioJ2(r)!==l).length;
+      const sairam = cardRows.filter(r => this.criterioJ2(r)===l && this.criterioPadrao(r)!==l).length;
+      return {
+        label:l, color:this.COLOR[l], bg:this.BG[l], txt:this.TXT[l], ring:this.RING[l],
+        auto, atual, autoNoSku, j2, trendMeaningful,
+        chegaram, sairam,
+        flowLabel: this.fmtInt(chegaram) + ' chegaram · ' + this.fmtInt(sairam) + ' saíram',
+        deltaLabel: this.deltaLabel(atual, j2, 'J2'),
+        deltaColor: this.deltaColor(atual, j2),
+        j1Period,
+        j2Period,
+        autoW: Math.round((auto/mx)*100)+'%',
+        atualW: Math.round((atual/mx)*100)+'%',
+        autoNoSkuW: Math.round((autoNoSku/mx)*100)+'%',
+        j2W: Math.round((j2/mx)*100)+'%',
+        onClick: ()=> this.setFilter({fAtual: active?'':l}),
+        cardStyle: 'cursor:pointer;background:#fff;border-radius:16px;padding:16px 17px;border:1.5px solid '+(active?this.COLOR[l]:'#e6e9f2')+';box-shadow:'+(active?'0 4px 16px rgba(40,80,239,0.10)':'none')+';transition:border-color .15s,box-shadow .15s'
+      };
+    });
+
+    const rowsAll = this.filteredSorted();
+    const start = this.state.page*this.PER;
+    const end = start+this.PER;
+    const pageRows = rowsAll.slice(start,end).map(r=>{
+      const padrao = this.criterioPadrao(r);
+      const da=this.ORDER[padrao]??0, db=this.ORDER[this.criterioCriado(r)]??0;
+      let icon='—', col='#b9c0d4';
+      if(db>da){icon='▲';col='#1F9E5A';} else if(db<da){icon='▼';col='#C0492A';}
+      const cri = this.criterioCriado(r);
+      const fm2 = (r.fms && r.fms.length > 1) ? r.fms[1] : r.fm7;
+      const mg2 = (r.mgs && r.mgs.length > 1) ? r.mgs[1] : r.mg7;
+      const mb2 = (r.mbs && r.mbs.length > 1) ? r.mbs[1] : r.mb7;
+      const sk2 = (r.sks && r.sks.length > 1) ? r.sks[1] : r.sk7;
+      const mc2 = (r.mcs && r.mcs.length > 1) ? r.mcs[1] : r.m7;
+      return {
+        ...r,
+        sub: r.id + (r.col? ' · col. '+r.col : ''),
+        na:padrao,
+        naBg:this.BG[padrao], naTxt:this.TXT[padrao],
+        cri,
+        criBg:this.BG[cri], criTxt:this.TXT[cri],
+        diffIcon:icon, diffColor:col,
+        fmFmt:this.fmtBRL(r.fm),
+        fm7Fmt:this.fmtBRL(r.fm7),
+        mgFmt:this.fmtBRL(r.mg),
+        mg7Fmt:this.fmtBRL(r.mg7),
+        mbFmt:this.fmtPct(r.mb),
+        mbDelta:this.metricDeltaLabel(r.mb, mb2),
+        mbDeltaColor:this.metricDeltaColor(r.mb, mb2),
+        m7Fmt:this.fmtInt(r.m7),
+        mcDelta:this.metricDeltaLabel(r.mc, mc2),
+        mcDeltaColor:this.metricDeltaColor(r.mc, mc2),
+        fmDelta:this.metricDeltaLabel(r.fm, fm2),
+        fmDeltaColor:this.metricDeltaColor(r.fm, fm2),
+        mgDelta:this.metricDeltaLabel(r.mg, mg2),
+        mgDeltaColor:this.metricDeltaColor(r.mg, mg2),
+        skFmt:this.fmtInt(Math.round(r.sk||0)),
+        sk7Fmt:this.fmtInt(Math.round(r.sk7||0)),
+        skDelta:this.metricDeltaLabel(r.sk, sk2),
+        skDeltaColor:this.metricDeltaColor(r.sk, sk2),
+        openTrend:()=>this.setState({trendRow:r})
+      };
+    });
+
+    const totalPages = Math.ceil(rowsAll.length/this.PER)||1;
+    const vendedores = [...new Set(this.data.RAW.map(r=>r.vd).filter(Boolean))].sort();
+    const caret = (col)=> this.state.sortCol===col ? (this.state.sortDir<0?'↓':'↑') : '↕';
+    const isVendedorView = this.state.view === 'vendedor';
+    const criteriaImpactData = isVendedorView ? this.criteriaImpactData() : {list:[], total:0};
+    const vendorRows = isVendedorView ? this.vendorRowsData(this.state.vendSortCol, this.state.vendSortDir) : [];
+    const vendCaret = (col)=> this.state.vendSortCol===col ? (this.state.vendSortDir<0?'↓':'↑') : '↕';
+
+    return {
+      dashboardVisible: this.state.dashboardVisible,
+      noAccess: this.state.noAccess,
+      recarregarPagina: ()=> window.location.reload(),
+      dismissNoAccess: ()=> this.setState({noAccess:false}),
+      totalFmt: this.fmtInt(total),
+      sourceLabel: this.state.sourceLabel,
+      sourceColor: this.state.sourceIsError ? '#C0492A' : '#8A94AD',
+      headerSourceColor: this.state.sourceIsError ? '#FFD6CC' : 'rgba(255,255,255,.68)',
+      rules, cards, criteriaRows, vendedores,
+      simulationActive,
+      segmentHeaderSubDisplay: simulationActive ? 'block' : 'none',
+      criteriaOpen: this.state.criteriaOpen,
+      criteriaToggleLabel: this.state.criteriaOpen ? 'Recolher' : 'Expandir',
+      criteriaBodyMargin: this.state.criteriaOpen ? '10px' : '0',
+      toggleCriteriaPanel: ()=> this.setState({criteriaOpen:!this.state.criteriaOpen}),
+      viewGeral: !isVendedorView,
+      viewVendedor: isVendedorView,
+      goToGeral: ()=> this.setState({view:'geral'}),
+      goToVendedor: ()=> this.setState({view:'vendedor'}),
+      navGeralBg: isVendedorView ? '#fff' : '#2850EF',
+      navGeralTxt: isVendedorView ? '#0B1733' : '#fff',
+      navGeralBorder: isVendedorView ? '#dde1ee' : '#2850EF',
+      navVendedorBg: isVendedorView ? '#2850EF' : '#fff',
+      navVendedorTxt: isVendedorView ? '#fff' : '#0B1733',
+      navVendedorBorder: isVendedorView ? '#2850EF' : '#dde1ee',
+      vendCountLabel: this.fmtInt(criteriaImpactData.total),
+      criteriaImpact: criteriaImpactData.list,
+      sortVendVd: ()=>this.toggleVendSort('vd'),
+      sortVendTotal: ()=>this.toggleVendSort('total'),
+      sortVendDiamond: ()=>this.toggleVendSort('DIAMOND'),
+      sortVendPlatinum: ()=>this.toggleVendSort('PLATINUM'),
+      sortVendGold: ()=>this.toggleVendSort('GOLD'),
+      sortVendStandard: ()=>this.toggleVendSort('STANDARD'),
+      sortVendUp: ()=>this.toggleVendSort('up'),
+      sortVendDown: ()=>this.toggleVendSort('down'),
+      caretVendVd: vendCaret('vd'),
+      caretVendTotal: vendCaret('total'),
+      caretVendDiamond: vendCaret('DIAMOND'),
+      caretVendPlatinum: vendCaret('PLATINUM'),
+      caretVendGold: vendCaret('GOLD'),
+      caretVendStandard: vendCaret('STANDARD'),
+      caretVendUp: vendCaret('up'),
+      caretVendDown: vendCaret('down'),
+      vendorRows: vendorRows.map(v=>({
+        vd: v.vd,
+        total: this.fmtInt(v.total),
+        diamond: this.fmtInt(v.DIAMOND),
+        platinum: this.fmtInt(v.PLATINUM),
+        gold: this.fmtInt(v.GOLD),
+        standard: this.fmtInt(v.STANDARD),
+        up: this.fmtInt(v.up),
+        down: this.fmtInt(v.down),
+        upColor: v.up ? '#1F9E5A' : '#8A94AD',
+        downColor: v.down ? '#C0492A' : '#8A94AD',
+        onClick: ()=> this.setState({view:'geral', fVend:v.vd, page:0})
+      })),
+      q: this.state,
+      onSearch: (e)=> this.setFilter({search:e.target.value}),
+      onFAutoNoSku: (e)=> this.setFilter({fAutoNoSku:e.target.value}),
+      onFAtual: (e)=> this.setFilter({fAtual:e.target.value}),
+      onFDir: (e)=> this.setFilter({fDir:e.target.value}),
+      onFReason: (e)=> this.setFilter({fReason:e.target.value}),
+      onFVend: (e)=> this.setFilter({fVend:e.target.value}),
+      hasActiveFilter: !!(this.state.search||this.state.fAutoNoSku||this.state.fAtual||this.state.fDir||this.state.fReason||this.state.fVend),
+      clearFilters: ()=> this.setState({search:'',fAutoNoSku:'',fAtual:'',fDir:'',fReason:'',fVend:'',page:0}),
+      resetCriteria: ()=> this.setState({criteria:null, fAutoNoSku:'', page:0}),
+      trendOpen: !!this.state.trendRow,
+      trendTitle: this.state.trendRow ? this.state.trendRow.no : '',
+      trendSubtitle: this.state.trendRow ? (this.state.trendRow.id + (this.state.trendRow.col ? ' · col. ' + this.state.trendRow.col : '') + (this.state.trendRow.vd ? ' · ' + this.state.trendRow.vd : '')) : '',
+      trendSegment: this.state.trendRow ? this.criterioCriado(this.state.trendRow) : '',
+      trendSegmentBg: this.state.trendRow ? this.BG[this.criterioCriado(this.state.trendRow)] : '#eef1f7',
+      trendSegmentTxt: this.state.trendRow ? this.TXT[this.criterioCriado(this.state.trendRow)] : '#4F5D78',
+      trendLevels: this.trendLevels(this.state.trendRow),
+      trendCards: this.trendCards(this.state.trendRow),
+      windowLegend: this.windowLegend(),
+      windowLegendAsc: this.windowLegendAsc(),
+      analysisPeriod: this.windowLegend().find(w => w.short === 'J1')?.period || 'últimos 12 meses fechados',
+      closeTrend: ()=> this.setState({trendRow:null}),
+      stopClick: (e)=> e.stopPropagation(),
+      countLabel: this.fmtInt(rowsAll.length),
+      exportRows: ()=> this.exportRows(rowsAll),
+      exportDisabled: rowsAll.length ? undefined : true,
+      exportOpacity: rowsAll.length ? '1' : '.45',
+      pageRows,
+      caretNo:caret('no'), caretVd:caret('vd'), caretFm:caret('fm'), caretFm7:caret('fm7'), caretMg:caret('mg'), caretMg7:caret('mg7'), caretMb:caret('mb'), caretMc:caret('mc'), caretM7:caret('m7'), caretSk:caret('sk'), caretSk7:caret('sk7'),
+      sortNo:()=>this.toggleSort('no'), sortFm:()=>this.toggleSort('fm'),
+      sortFm7:()=>this.toggleSort('fm7'), sortMg:()=>this.toggleSort('mg'), sortMg7:()=>this.toggleSort('mg7'), sortMb:()=>this.toggleSort('mb'), sortVd:()=>this.toggleSort('vd'), sortMc:()=>this.toggleSort('mc'), sortM7:()=>this.toggleSort('m7'), sortSk:()=>this.toggleSort('sk'), sortSk7:()=>this.toggleSort('sk7'),
+      pageInfo: 'Pág. '+(this.state.page+1)+' de '+totalPages,
+      rangeLabel: rowsAll.length? (this.fmtInt(start+1)+'–'+this.fmtInt(Math.min(end,rowsAll.length))+' de '+this.fmtInt(rowsAll.length)) : '0 resultados',
+      prevDisabled: this.state.page===0 ? true : undefined,
+      nextDisabled: end>=rowsAll.length ? true : undefined,
+      prevOpacity: this.state.page===0?'.4':'1',
+      nextOpacity: end>=rowsAll.length?'.4':'1',
+      prevPage:()=>{ if(this.state.page>0) this.setState({page:this.state.page-1}); },
+      nextPage:()=>{ if(end<rowsAll.length) this.setState({page:this.state.page+1}); },
+    };
+  }
+
+  toggleSort(col){
+    if(this.state.sortCol===col) this.setState({sortDir:this.state.sortDir*-1});
+    else this.setState({sortCol:col, sortDir:-1, page:0});
+  }
+
+  exportRows(rows){
+    const cols = [
+      ['Segmentação (Padrão)', r=>this.criterioPadrao(r)],
+      ['Segmentação (Simulação)', r=>this.criterioCriado(r)],
+      ['Cliente', r=>r.no],
+      ['ID Cliente', r=>r.id],
+      ['Coligada', r=>r.col],
+      ['Vendedor', r=>r.vd],
+      ['Fat. Médio (Janela 1 - Últ. 12 m)', r=>this.fmtBRL(r.fm)],
+      ['Fat. Médio (Janela 7 - 2025)', r=>this.fmtBRL(r.fm7)],
+      ['Cash Margin Média (Janela 1 - Últ. 12 m)', r=>this.fmtBRL(r.mg)],
+      ['Cash Margin Média (Janela 7 - 2025)', r=>this.fmtBRL(r.mg7)],
+      ['Margem % (Janela 1 - Últ. 12 m)', r=>this.fmtPct(r.mb)],
+      ['Margem % (Janela 7 - 2025)', r=>this.fmtPct(r.mb7)],
+      ['Média SKUs (Janela 1 - Últ. 12 m)', r=>this.fmtInt(Math.round(r.sk||0))],
+      ['Média SKUs (Janela 7 - 2025)', r=>this.fmtInt(Math.round(r.sk7||0))],
+      ['Meses c/ Compra (Janela 1 - Últ. 12 m)', r=>this.fmtInt(Math.round(r.mc||0))],
+      ['Meses c/ Compra (Janela 7 - 2025)', r=>this.fmtInt(Math.round(r.m7||0))]
+    ];
+    const lines = [
+      cols.map(c=>this.csvCell(c[0])).join(';'),
+      ...rows.map(r=>cols.map(c=>this.csvCell(c[1](r))).join(';'))
+    ];
+    const blob = new Blob(['\uFEFF'+lines.join('\r\n')], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'dashboard_segmentacao_'+this.exportDate()+'.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  csvCell(value){
+    return '"' + String(value ?? '').replace(/"/g,'""') + '"';
+  }
+
+  exportDate(){
+    const d = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  }
+
+  deltaLabel(base, ref, label = 'padrão'){
+    if(!ref && !base) return '— sem variação';
+    if(!ref) return '▲ sem base ' + label;
+    const pct = ((base-ref)/ref)*100;
+    if(Math.abs(pct)<0.05) return '— 0,0% vs ' + label;
+    return (pct>0?'▲ ':'▼ ') + Math.abs(pct).toFixed(1).replace('.', ',') + '% ' + (pct>0?'acima':'abaixo') + ' de ' + label;
+  }
+
+  deltaColor(base, ref){
+    if(!ref && !base) return '#8A94AD';
+    if(!ref) return '#1F9E5A';
+    const pct = ((base-ref)/ref)*100;
+    if(Math.abs(pct)<0.05) return '#8A94AD';
+    return pct>0 ? '#1F9E5A' : '#C0492A';
+  }
+
+  metricDeltaLabel(current, base){
+    current = Number(current)||0;
+    base = Number(base)||0;
+    if(!base) return '';
+    const pct = ((current-base)/base)*100;
+    if(Math.abs(pct)<0.05) return '— 0,0%';
+    return (pct>0?'▲ ':'▼ ') + Math.abs(pct).toFixed(1).replace('.', ',') + '%';
+  }
+
+  metricDeltaColor(current, base){
+    current = Number(current)||0;
+    base = Number(base)||0;
+    if(!base) return '#8A94AD';
+    const pct = ((current-base)/base)*100;
+    if(Math.abs(pct)<0.05) return '#8A94AD';
+    return pct>0 ? '#1F9E5A' : '#C0492A';
+  }
+
+  trendCards(r){
+    if(!r) return [];
+    return [
+      this.chartCard('Fat. Médio', r.fms, 'brl', '#4F5D78', 'fm'),
+      this.chartCard('Cash Margin Média', r.mgs, 'brl', '#4F5D78', 'mg', {subValues:r.mbs, subLabel:'MB'}),
+      this.chartCard('Média SKUs', r.sks, 'int', '#4F5D78', 'sk'),
+      this.chartCard('Meses c/ Compra', r.mcs, 'int', '#4F5D78', 'mc')
+    ];
+  }
+
+  trendLevels(r){
+    if(!r) return [];
+    const fms = (r.fms || []).slice().reverse();
+    const mgs = (r.mgs || []).slice().reverse();
+    const mbs = (r.mbs || []).slice().reverse();
+    const sks = (r.sks || []).slice().reverse();
+    const mcs = (r.mcs || []).slice().reverse();
+    return fms.map((fm, i)=>{
+      const level = this.criterioPorValores(fm, mgs[i], mbs[i], mcs[i], sks[i]);
+      return {
+        j:'J' + (7 - i),
+        level,
+        bg:this.BG[level],
+        txt:this.TXT[level]
+      };
+    });
+  }
+
+  windowLegend(){
+    const today = new Date();
+    const base = new Date(today.getFullYear(), today.getMonth(), 0);
+    return Array.from({length:7}, (_, i)=>{
+      const n = 7 - i;
+      const offset = n - 1;
+      const start = new Date(base.getFullYear(), base.getMonth() - 11 - offset, 1);
+      const end = new Date(base.getFullYear(), base.getMonth() - offset + 1, 0);
+      return {
+        short:'J' + n,
+        label:'Janela ' + n,
+        period:this.monthYear(start) + ' a ' + this.monthYear(end)
+      };
+    });
+  }
+
+  windowLegendAsc(){
+    return this.windowLegend().slice().reverse();
+  }
+
+  monthYear(date){
+    const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return months[date.getMonth()] + '/' + String(date.getFullYear()).slice(-2);
+  }
+
+  chartCard(title, values, type, color, metric, options = {}){
+    const vals = (values || []).slice().reverse();
+    const clean = vals.map(v => Number(v) || 0);
+    const subVals = (options.subValues || []).slice().reverse();
+    const max = Math.max(...clean, 1);
+    const min = Math.min(...clean, 0);
+    const span = Math.max(max - min, 1);
+    const xs = clean.map((_, i) => 36 + i * 74.67);
+    const ys = clean.map(v => 86 - ((v - min) / span) * 52);
+    const points = xs.map((x, i) => x.toFixed(1) + ',' + ys[i].toFixed(1)).join(' ');
+    const dots = xs.map((x, i) => ({x:x.toFixed(1), y:ys[i].toFixed(1)}));
+    const valueLabels = xs.map((x, i) => ({
+      x:x.toFixed(1),
+      y:Math.max(12, ys[i] - 8).toFixed(1),
+      left:(x / 520 * 100).toFixed(2) + '%',
+      top:(Math.max(15, ys[i] - 9) / 108 * 100).toFixed(2) + '%',
+      t:this.compactMetric(clean[i], type),
+      sub:options.subValues ? (options.subLabel + ': ' + this.fmtPct(subVals[i])) : '',
+      subDisplay:options.subValues ? 'block' : 'none'
+    }));
+    const valueList = clean.map((v, i) => ({j:'J' + (7 - i), t:this.compactMetric(v, type)}));
+    const labels = xs.map((x, i) => ({
+      x:x.toFixed(1),
+      left:(x / 520 * 100).toFixed(2) + '%',
+      top:'76%',
+      t:'J' + (7 - i)
+    }));
+    const segments = xs.map((x, i) => {
+      const level = this.metricSegment(clean[i], metric);
+      const inactive = this.metricCriteriaInactive(metric);
+      return {
+        left:(x / 520 * 100).toFixed(2) + '%',
+        top:'86%',
+        initial: inactive ? '-' : this.levelInitial(level),
+        bg: inactive ? '#fff' : this.BG[level],
+        txt: inactive ? '#8A94AD' : this.TXT[level],
+        border: inactive ? '1px solid #dfe3ef' : '1px solid transparent'
+      };
+    });
+    const first = clean[0], last = clean[clean.length - 1], previous = clean[clean.length - 2];
+    return {
+      title, color, support:options.support || '', supportDisplay:options.support ? 'inline' : 'none', iconPaths:this.metricIcon(metric), ...this.metricRuleValues(metric, type), points, dots, values:valueLabels, valueList, labels, segments,
+      grid1:'36,34 484,34',
+      grid2:'36,86 484,86',
+      start:'J7: ' + this.formatMetric(first, type),
+      end:'J1: ' + this.formatMetric(last, type),
+      delta:this.metricDeltaLabel(last, previous),
+      deltaColor:this.metricDeltaColor(last, previous)
+    };
+  }
+
+  metricRuleValues(metric, type){
+    const crit = this.criteria();
+    const active = !this.metricCriteriaInactive(metric);
+    const val = level => this.formatMetric(this.criteriaValue(crit[level]?.[metric]), type);
+    return {
+      ruleDisplay: active ? 'inline' : 'none',
+      ruleGold: val('GOLD'),
+      rulePlatinum: val('PLATINUM'),
+      ruleDiamond: val('DIAMOND')
+    };
+  }
+
+  metricIcon(metric){
+    const icons = {
+      fm:['M12 2v20','M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6'],
+      mg:['M3 17l6-6 4 4 8-8','M14 7h7v7'],
+      mbp:['M19 5 5 19','M6.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z','M17.5 20a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z'],
+      sk:['M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z','M3.27 6.96 12 12.01l8.73-5.05','M12 22.08V12'],
+      mc:['M8 2v4','M16 2v4','M3 10h18','M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z']
+    };
+    return icons[metric] || [];
+  }
+
+  metricSegment(value, metric){
+    const criteria = this.criteria();
+    const v = metric === 'sk' ? Math.round(Number(value) || 0) : (Number(value) || 0);
+    for(const level of ['DIAMOND','PLATINUM','GOLD']){
+      const rule = criteria[level];
+      const threshold = Number(rule?.[metric]) || 0;
+      if(threshold > 0 && v >= threshold) return level;
+    }
+    return 'STANDARD';
+  }
+
+  metricCriteriaInactive(metric){
+    const criteria = this.criteria();
+    return ['DIAMOND','PLATINUM','GOLD'].every(level => this.criteriaValue(criteria[level]?.[metric]) === 0);
+  }
+
+  levelInitial(level){
+    return level === 'SEM SEGMENTAÇÃO' ? 'S' : String(level || 'STANDARD').charAt(0);
+  }
+
+  formatMetric(v, type){
+    if(type === 'pct') return this.fmtPct(v);
+    return type === 'brl' ? this.fmtBRL(v) : this.fmtInt(Math.round(v || 0));
+  }
+
+  compactMetric(v, type){
+    v = Number(v) || 0;
+    if(type === 'pct') return this.fmtPct(v);
+    if(type !== 'brl') return this.fmtInt(Math.round(v));
+    if(Math.abs(v) >= 1000000) return 'R$ ' + (v/1000000).toFixed(1).replace('.', ',') + ' mi';
+    if(Math.abs(v) < 10000) return this.fmtBRL(v);
+    if(Math.abs(v) >= 1000) return 'R$ ' + Math.round(v/1000).toLocaleString('pt-BR') + ' mil';
+    return this.fmtBRL(v);
+  }
+
+  updateCriteria(level, field, value){
+    const n = Number(value);
+    const base = this.criteria();
+    const next = {
+      DIAMOND:{...base.DIAMOND},
+      PLATINUM:{...base.PLATINUM},
+      GOLD:{...base.GOLD}
+    };
+    next[level][field] = field === 'mg'
+      ? (value === '' ? '' : (Number.isFinite(n) ? n : ''))
+      : (Number.isFinite(n) ? n : 0);
+    const patch = {criteria:next, page:0};
+    if(!this.criteriaActiveFor(next)) patch.fAutoNoSku = '';
+    this.setState(patch);
+  }
+
+  criteriaActiveFor(criteriaObj){
+    return ['fm','mg','sk','mc'].some(field =>
+      ['DIAMOND','PLATINUM','GOLD'].some(level =>
+        this.criteriaValue(criteriaObj[level]?.[field]) !== this.criteriaValue(this.DEFAULT_CRITERIA[level]?.[field])
+      )
+    );
+  }
+
+  criterioCriado(r){
+    return this.criterioPorValores(r.fm, r.mg, r.mb, r.mc, r.sk);
+  }
+
+  criterioPadrao(r){
+    return this.criterioPorValores(r.fm, r.mg, r.mb, r.mc, r.sk, this.DEFAULT_CRITERIA);
+  }
+
+  criterioPorValores(fm, mg, mbp, mc, sk, criteriaArg){
+    const criteria = criteriaArg || this.criteria();
+    for(const level of ['DIAMOND','PLATINUM','GOLD']){
+      const rule = criteria[level];
+      const marginCashMin = rule.mg === '' || rule.mg == null ? 0 : Number(rule.mg) || 0;
+      if((fm||0)>=rule.fm && (mg||0)>=marginCashMin && (mc||0)>=rule.mc && Math.round(sk||0)>=rule.sk) return level;
+    }
+    return 'STANDARD';
+  }
+
+  defaultCounts(rows){
+    const counts = this.LEVELS.reduce((acc,l)=>({...acc,[l]:0}),{});
+    (rows || this.data.RAW).forEach(r=>{ const l=this.criterioPadrao(r); counts[l]=(counts[l]||0)+1; });
+    return counts;
+  }
+
+  criterioJ2(r){
+    return this.criterioPorValores((r.fms||[])[1], (r.mgs||[])[1], (r.mbs||[])[1], (r.mcs||[])[1], (r.sks||[])[1], this.DEFAULT_CRITERIA);
+  }
+
+  windowDirection(r){
+    const j1 = this.ORDER[this.criterioPadrao(r)] ?? 0;
+    const j2 = this.ORDER[this.criterioJ2(r)] ?? 0;
+    if(j1 > j2) return 'up';
+    if(j1 < j2) return 'down';
+    return 'eq';
+  }
+
+  vendorRowsData(sortCol, sortDir){
+    const byVend = {};
+    this.data.RAW.forEach(r=>{
+      const vd = r.vd || '—';
+      if(!byVend[vd]) byVend[vd] = {vd, total:0, DIAMOND:0, PLATINUM:0, GOLD:0, STANDARD:0, up:0, down:0};
+      const b = byVend[vd];
+      b.total++;
+      b[this.criterioPadrao(r)]++;
+      const dir = this.windowDirection(r);
+      if(dir==='up') b.up++;
+      else if(dir==='down') b.down++;
+    });
+    const rows = Object.values(byVend);
+    rows.sort((a,b)=>{
+      const va = a[sortCol], vb = b[sortCol];
+      if(typeof va === 'string') return sortDir*va.localeCompare(vb || '');
+      return sortDir*((va||0)-(vb||0));
+    });
+    return rows;
+  }
+
+  toggleVendSort(col){
+    if(this.state.vendSortCol===col) this.setState({vendSortDir:this.state.vendSortDir*-1});
+    else this.setState({vendSortCol:col, vendSortDir:-1});
+  }
+
+  criteriaImpactData(){
+    const labels = {fm:'Faturamento', mg:'Cash Margin', sk:'Média SKUs', mc:'Meses c/ compra'};
+    const counts = {fm:0, mg:0, sk:0, mc:0};
+    let total = 0;
+    this.data.RAW.forEach(r=>{
+      const reasons = this.windowChangeReasons(r);
+      if(!reasons.length) return;
+      total++;
+      reasons.forEach(f=>{ counts[f] = (counts[f]||0)+1; });
+    });
+    const maxCount = Math.max(...Object.values(counts), 1);
+    const list = ['fm','mg','sk','mc'].map(f=>({
+      label: labels[f],
+      count: counts[f],
+      pct: total ? (counts[f]/total*100).toFixed(1).replace('.', ',')+'%' : '0,0%',
+      pctW: Math.round((counts[f]/maxCount)*100)+'%'
+    })).sort((a,b)=>b.count-a.count);
+    return {list, total};
+  }
+
+  matchesWindowChangeReason(r, reason){
+    const reasons = this.windowChangeReasons(r);
+    if(reason === 'multi') return reasons.length > 1;
+    return reasons.includes(reason);
+  }
+
+  windowChangeReasons(r){
+    const j1 = this.criterioPadrao(r);
+    const j2 = this.criterioJ2(r);
+    if(j1===j2) return [];
+    const fields = ['fm','mg','sk','mc'];
+    const impacted = fields.filter(field => this.windowFieldImpactsRow(r, field));
+    return impacted.length ? impacted : fields;
+  }
+
+  windowFieldImpactsRow(r, field){
+    const v1 = this.rowMetricValueAt(r, field, 0);
+    const v2 = this.rowMetricValueAt(r, field, 1);
+    return ['DIAMOND','PLATINUM','GOLD'].some(level => {
+      const min = this.criteriaValue(this.DEFAULT_CRITERIA[level]?.[field]);
+      return (v1 >= min) !== (v2 >= min);
+    });
+  }
+
+  criteriaValue(value){
+    if(value === '' || value == null) return 0;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  rowMetricValueAt(r, field, idx){
+    const arr = field==='fm' ? r.fms : field==='mg' ? r.mgs : field==='sk' ? r.sks : field==='mc' ? r.mcs : null;
+    const v = (arr||[])[idx];
+    return field==='sk' ? Math.round(Number(v) || 0) : (Number(v) || 0);
+  }
+
+  componentDidMount(){
+    const done = (label, sourceIsError=false)=> this.setState({sourceLabel:label, sourceIsError});
+    const markLoaded = ()=>{
+      const meta = window.LABOR_DASH_META || {};
+      const total = window.LABOR_DASH?.COUNTS?.total || 0;
+      done((meta.source || 'Fonte de dados') + ' · ' + this.fmtInt(total) + ' clientes');
+      this.setState({dashboardVisible:true});
+    };
+    if(window.LABOR_DASH){ markLoaded(); return; }
+    if(window.LABOR_DASH_READY){
+      window.LABOR_DASH_READY.then(()=>markLoaded()).catch(err=>{
+        done('Erro ao carregar dados: ' + (err?.message || err), true);
+        this.setState({noAccess:true});
+      }).finally(()=>this.forceUpdate());
+      return;
+    }
+    let t=0; const iv=setInterval(()=>{ if(window.LABOR_DASH||t++>40){clearInterval(iv); if(window.LABOR_DASH) markLoaded(); else this.setState({noAccess:true}); this.forceUpdate();} },50);
+  }
+}
+</script>
+</body>
+</html>
