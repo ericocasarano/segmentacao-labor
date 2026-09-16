@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;icon_names=finance_mode" />
 <script>
 window.LABOR_DASH_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r/sites/DashboardSegmentaoClientes/Shared%20Documents/labor-data.js?d=wee5043ccac7d4f72a7d23009f68748ca&csf=1&web=1&e=kcd93x';
 window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r/sites/DashboardSegmentaoClientes/Shared%20Documents/labor-data-operacional.js?d=w8c871fb163824d8ea9a32725cbe0a99d&csf=1&web=1&e=hhoikN';
@@ -34,6 +35,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
   .lbr-expand-header{cursor:pointer;transition:background-color .15s ease,box-shadow .15s ease}
   .lbr-expand-header:hover{background:#F4F6FC;box-shadow:inset 0 0 0 1px #dde4f5}
   @keyframes lbrbar{from{width:0}}
+  .material-symbols-outlined{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-smoothing:antialiased;font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24}
 </style>
 </helmet>
 <div style="font-family:'Archivo',system-ui,sans-serif;background:#F4F5FA;min-height:100vh;color:#0B1733;padding:28px 32px 56px">
@@ -67,9 +69,19 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
     </header>
 
     <!-- Navegação -->
-    <nav style="display:flex;gap:8px;margin-bottom:18px">
-      <button onClick="{{ goToGeral }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navGeralBorder }};background:{{ navGeralBg }};color:{{ navGeralTxt }}">Visão Oficial</button>
-      <button onClick="{{ goToVendedor }}" style="display:none;font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navVendedorBorder }};background:{{ navVendedorBg }};color:{{ navVendedorTxt }}">Visão por Vendedor</button>
+    <nav style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onClick="{{ goToGeral }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navGeralBorder }};background:{{ navGeralBg }};color:{{ navGeralTxt }}">Visão Oficial</button>
+        <button onClick="{{ goToVendedor }}" style="display:none;font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navVendedorBorder }};background:{{ navVendedorBg }};color:{{ navVendedorTxt }}">Visão por Vendedor</button>
+        <button onClick="{{ goToTendencia }}" disabled="{{ modoOperacionalDisabled }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navTendenciaBorder }};background:{{ navTendenciaBg }};color:{{ navTendenciaTxt }};opacity:{{ modoOperacionalOpacity }}">Tendência das Mudanças</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;flex-shrink:0;background:#fff;border:1px solid #e6e9f2;border-radius:12px;padding:8px 14px">
+        <span style="font-family:inherit;font-size:12.5px;font-weight:700;color:{{ porLojaLabelColor }}">Por cliente</span>
+        <button onClick="{{ toggleAgrupamento }}" title="Alternar entre visão por cliente e por coligada" style="position:relative;width:42px;height:23px;border-radius:999px;border:none;cursor:pointer;background:{{ agrupamentoTrackBg }};padding:0;flex-shrink:0">
+          <span style="position:absolute;top:2px;left:{{ agrupamentoThumbLeft }};width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(11,23,51,.3);transition:left .15s ease"></span>
+        </button>
+        <span style="font-family:inherit;font-size:12.5px;font-weight:700;color:{{ porColigadaLabelColor }}">Por coligada</span>
+      </div>
     </nav>
 
     <sc-if value="{{ viewGeral }}" hint-placeholder-val="{{ true }}">
@@ -85,16 +97,17 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
           <span style="font-family:inherit;font-size:12.5px;font-weight:700;color:{{ operacionalLabelColor }}">Operacional</span>
         </div>
         <sc-if value="{{ modoOperacionalAtivo }}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:#8A5A00;background:#FFF6E0;border:1px solid #F5DFA0;border-radius:8px;padding:6px 10px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#8A5A00;background:#FFF6E0;border:1px solid #F5DFA0;border-radius:8px;padding:6px 10px">
             <span style="font-weight:700">Prévia:</span> mostrando como ficaria a segmentação se o mês fechasse hoje. Não é o dado oficial — pode mudar até o fechamento.
           </div>
         </sc-if>
       </div>
     </section>
 
-    <!-- Critérios por cluster (só em modo Oficial) -->
-    <sc-if value="{{ modoOficialAtivo }}" hint-placeholder-val="{{ true }}">
-    <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:20px 22px;margin-bottom:18px">
+    <!-- Critérios por cluster (só em modo Oficial, com transição de altura ao trocar de modo) -->
+    <div style="display:grid;grid-template-rows:{{ criteriosGridRows }};transition:grid-template-rows .35s ease,margin-bottom .35s ease;margin-bottom:{{ criteriosGridMargin }}">
+    <div style="overflow:hidden;min-height:0;opacity:{{ criteriosOpacity }};transition:opacity .2s ease">
+    <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:20px 22px">
       <div class="lbr-expand-header" onClick="{{ toggleCriteriaCardsPanel }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:{{ criteriaCardsHeaderMargin }};padding:8px;margin-left:-8px;margin-right:-8px;margin-top:-8px;border-radius:12px">
         <div style="display:flex;align-items:center;gap:8px">
           <span style="width:26px;height:26px;border-radius:8px;background:#eef1fe;color:#2850EF;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -107,7 +120,8 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
         </div>
         <span style="font-family:inherit;font-size:11.5px;font-weight:700;color:#0B1733;background:#fff;border:1px solid #dde1ee;border-radius:8px;padding:7px 11px;white-space:nowrap;flex-shrink:0">{{ criteriaCardsToggleLabel }}</span>
       </div>
-      <sc-if value="{{ criteriaCardsOpen }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-rows:{{ criteriaCardsGridRows }};transition:grid-template-rows .3s ease">
+      <div style="overflow:hidden;min-height:0;opacity:{{ criteriaCardsOpacity }};transition:opacity .18s ease">
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
         <sc-for list="{{ rules }}" as="r" hint-placeholder-count="5">
           <div style="border:1px solid {{ r.border }};border-radius:12px;padding:13px 14px;background:{{ r.bgsoft }}">
@@ -121,7 +135,8 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
           </div>
         </sc-for>
       </div>
-      </sc-if>
+      </div>
+      </div>
       <div style="margin-top:16px;padding-top:14px;border-top:1px solid #eef0f7">
         <div class="lbr-expand-header" onClick="{{ toggleCriteriaPanel }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:{{ criteriaBodyMargin }};padding:8px;margin-left:-8px;margin-right:-8px;margin-top:-8px;border-radius:12px">
           <div>
@@ -142,7 +157,8 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
             </sc-if>
           </div>
         </div>
-        <sc-if value="{{ criteriaOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-rows:{{ criteriaGridRows }};transition:grid-template-rows .3s ease">
+        <div style="overflow:hidden;min-height:0;opacity:{{ criteriaOpacity }};transition:opacity .18s ease">
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
             <sc-for list="{{ criteriaRows }}" as="c" hint-placeholder-count="3">
               <div style="border:1px solid #eceef5;border-radius:10px;padding:10px 12px;background:#fafbfe">
@@ -166,10 +182,12 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
               </div>
             </sc-for>
           </div>
-        </sc-if>
+        </div>
+        </div>
       </div>
     </section>
-    </sc-if>
+    </div>
+    </div>
 
     <!-- Cards de resumo -->
     <section style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px">
@@ -356,7 +374,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
                   <span style="display:block;margin-top:2px;font-size:10px;font-weight:800;color:{{ r.mcDeltaColor }}">{{ r.mcDelta }}</span>
                 </td>
                 <td style="padding:11px 8px;white-space:nowrap;text-align:center">
-                  <button onClick="{{ r.openTrend }}" title="Ver evolução do cliente" style="font-family:inherit;border:1px solid #dde1ee;background:#fff;color:#2850EF;border-radius:8px;padding:5px 8px;cursor:pointer;font-size:12px;font-weight:800;line-height:1">↗</button>
+                  <button onClick="{{ r.openTrend }}" title="Ver evolução do cliente" style="font-family:inherit;border:1px solid #dde1ee;background:#fff;color:#2850EF;border-radius:8px;padding:5px 8px;cursor:pointer;line-height:1;display:inline-flex;align-items:center"><span class="material-symbols-outlined" style="font-size:16px">finance_mode</span></button>
                 </td>
               </tr>
             </sc-for>
@@ -406,8 +424,8 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
               <th onClick="{{ sortVendPlatinum }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#6A748F;text-transform:uppercase;letter-spacing:.04em">Platinum <span style="color:#b9c0d4">{{ caretVendPlatinum }}</span></th>
               <th onClick="{{ sortVendGold }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#6A748F;text-transform:uppercase;letter-spacing:.04em">Gold <span style="color:#b9c0d4">{{ caretVendGold }}</span></th>
               <th onClick="{{ sortVendStandard }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#6A748F;text-transform:uppercase;letter-spacing:.04em">Standard <span style="color:#b9c0d4">{{ caretVendStandard }}</span></th>
-              <th onClick="{{ sortVendUp }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#1F9E5A;text-transform:uppercase;letter-spacing:.04em">Subiu <span style="color:#bcdfcb">{{ caretVendUp }}</span></th>
-              <th onClick="{{ sortVendDown }}" style="cursor:pointer;text-align:right;padding:11px 16px;font-size:10.5px;font-weight:700;color:#C0492A;text-transform:uppercase;letter-spacing:.04em">Desceu <span style="color:#e6bcac">{{ caretVendDown }}</span></th>
+              <th onClick="{{ sortVendUp }}" style="cursor:pointer;text-align:right;padding:11px 12px;font-size:10.5px;font-weight:700;color:#2F7A56;text-transform:uppercase;letter-spacing:.04em">Subiu <span style="color:#bcdfcb">{{ caretVendUp }}</span></th>
+              <th onClick="{{ sortVendDown }}" style="cursor:pointer;text-align:right;padding:11px 16px;font-size:10.5px;font-weight:700;color:#9C4A3A;text-transform:uppercase;letter-spacing:.04em">Desceu <span style="color:#e6bcac">{{ caretVendDown }}</span></th>
             </tr>
           </thead>
           <tbody>
@@ -428,6 +446,143 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
       </div>
     </section>
 
+    </sc-if>
+
+    <!-- Tendência das Mudanças -->
+    <sc-if value="{{ viewTendencia }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#8A5A00;background:#FFF6E0;border:1px solid #F5DFA0;border-radius:8px;padding:6px 10px;margin-bottom:14px">
+        <span style="font-weight:700">Prévia:</span> compara a classificação oficial de cada cliente com a projeção de hoje. Não é o dado oficial — pode mudar até o fechamento do mês.
+      </div>
+
+      <section style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px">
+        <div style="background:#fff;border:1.5px solid #bcdfcb;border-radius:16px;padding:16px 17px">
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block;margin-bottom:11px;background:#e7f7ee;color:#2F7A56;letter-spacing:.03em">▲ SUBINDO</span>
+          <div style="font-size:30px;font-weight:800;line-height:1;letter-spacing:-0.02em;color:#2F7A56">{{ tSubindoTotal }}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+            <sc-for list="{{ tSubindoBreakdown }}" as="b" hint-placeholder-count="3">
+              <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;background:#fafbfe;border:1px solid #eceef5;border-radius:999px;padding:3px 8px 3px 3px">
+                <span style="font-weight:700;color:#0B1733;background:#eef0f7;border-radius:999px;padding:1px 6px">{{ b.count }}</span>
+                <span style="padding:2px 7px;border-radius:6px;font-weight:600;background:{{ b.deBg }};color:{{ b.deTxt }}">{{ b.de }}</span>
+                <span style="font-weight:800;color:{{ b.setaColor }}">{{ b.seta }}</span>
+                <span style="padding:2px 7px;border-radius:6px;font-weight:600;background:{{ b.paraBg }};color:{{ b.paraTxt }}">{{ b.para }}</span>
+              </span>
+            </sc-for>
+          </div>
+        </div>
+        <div style="background:#fff;border:1.5px solid #e6bcac;border-radius:16px;padding:16px 17px">
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block;margin-bottom:11px;background:#fbeae4;color:#9C4A3A;letter-spacing:.03em">▼ DESCENDO</span>
+          <div style="font-size:30px;font-weight:800;line-height:1;letter-spacing:-0.02em;color:#9C4A3A">{{ tDescendoTotal }}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+            <sc-for list="{{ tDescendoBreakdown }}" as="b" hint-placeholder-count="3">
+              <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;background:#fafbfe;border:1px solid #eceef5;border-radius:999px;padding:3px 8px 3px 3px">
+                <span style="font-weight:700;color:#0B1733;background:#eef0f7;border-radius:999px;padding:1px 6px">{{ b.count }}</span>
+                <span style="padding:2px 7px;border-radius:6px;font-weight:600;background:{{ b.deBg }};color:{{ b.deTxt }}">{{ b.de }}</span>
+                <span style="font-weight:800;color:{{ b.setaColor }}">{{ b.seta }}</span>
+                <span style="padding:2px 7px;border-radius:6px;font-weight:600;background:{{ b.paraBg }};color:{{ b.paraTxt }}">{{ b.para }}</span>
+              </span>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <section style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px">
+        <div style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:16px 17px">
+          <div style="font-size:11px;font-weight:800;color:#2F7A56;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Top 5 vendedores — mais clientes subindo</div>
+          <div style="font-size:10.5px;color:#8A94AD;margin-bottom:12px">Quantidade de clientes na carteira mudando pra um segmento acima</div>
+          <sc-for list="{{ tTopGanhando }}" as="v" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:12px">
+              <div style="width:120px;flex-shrink:0;color:#0B1733;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ v.vd }}</div>
+              <div style="flex:1;background:#eef0f7;border-radius:4px;height:8px;overflow:hidden"><div style="height:100%;border-radius:4px;width:{{ v.w }};background:#8FCBAB"></div></div>
+              <div style="width:24px;text-align:right;color:#2F7A56;font-weight:700">{{ v.countFmt }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:16px 17px">
+          <div style="font-size:11px;font-weight:800;color:#9C4A3A;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Top 5 vendedores — mais clientes descendo</div>
+          <div style="font-size:10.5px;color:#8A94AD;margin-bottom:12px">Quantidade de clientes na carteira mudando pra um segmento abaixo</div>
+          <sc-for list="{{ tTopPerdendo }}" as="v" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:12px">
+              <div style="width:120px;flex-shrink:0;color:#0B1733;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ v.vd }}</div>
+              <div style="flex:1;background:#eef0f7;border-radius:4px;height:8px;overflow:hidden"><div style="height:100%;border-radius:4px;width:{{ v.w }};background:#E0A99A"></div></div>
+              <div style="width:24px;text-align:right;color:#9C4A3A;font-weight:700">{{ v.countFmt }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:16px 18px;margin-bottom:14px">
+        <div style="flex:1;min-width:220px;position:relative">
+          <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Buscar cliente</label>
+          <input value="{{ tSearch }}" onInput="{{ onTSearch }}" placeholder="Nome, ID, CNPJ ou Coligada…" style="font-family:inherit;font-size:13px;padding:9px 12px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none">
+        </div>
+        <div style="min-width:160px">
+          <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Direção</label>
+          <select value="{{ tFDir }}" onChange="{{ onTFDir }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
+            <option value="">Todos</option>
+            <option value="up">Só subindo</option>
+            <option value="down">Só descendo</option>
+          </select>
+        </div>
+        <div style="min-width:190px">
+          <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Motivo provável</label>
+          <select value="{{ tFMotivo }}" onChange="{{ onTFMotivo }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
+            <option value="">Todos</option>
+            <option value="Faturamento">Faturamento</option>
+            <option value="Cash Margin">Cash Margin</option>
+            <option value="Média SKUs">Média SKUs</option>
+            <option value="Meses c/ compra">Meses c/ compra</option>
+            <option value="Combinação">Combinação de critérios</option>
+          </select>
+        </div>
+        <div style="min-width:180px">
+          <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Vendedor</label>
+          <select value="{{ tFVend }}" onChange="{{ onTFVend }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
+            <option value="">Todos</option>
+            <sc-for list="{{ tVendedores }}" as="v" hint-placeholder-count="5">
+              <option value="{{ v }}">{{ v }}</option>
+            </sc-for>
+          </select>
+        </div>
+        <div style="font-size:12.5px;color:#6A748F;padding-bottom:9px">{{ tCountLabel }} clientes mudando</div>
+      </section>
+
+      <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;overflow:hidden">
+        <div class="lbr-scroll" style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+            <thead>
+              <tr style="background:#fafbfe">
+                <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:left;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em">Cliente</th>
+                <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:left;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em">Vendedor</th>
+                <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:center;padding:13px 14px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em">Oficial → Projetado</th>
+                <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:left;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em">Motivo provável</th>
+                <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:right;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em">Faturamento (Oficial → Hoje)</th>
+                <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:center;padding:13px 8px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em">Evol.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ tRows }}" as="r" hint-placeholder-count="8">
+                <tr style="border-bottom:1px solid #f1f3f9">
+                  <td style="padding:11px 16px;white-space:nowrap">
+                    <div style="font-weight:600;color:#0B1733">{{ r.no }}</div>
+                    <div style="font-size:11px;color:#9aa3bd;margin-top:1px">{{ r.sub }}</div>
+                  </td>
+                  <td style="padding:11px 16px;white-space:nowrap;color:#6A748F;font-size:12px">{{ r.vd }}</td>
+                  <td style="padding:11px 12px;white-space:nowrap;text-align:center">
+                    <span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:{{ r.oficialBg }};color:{{ r.oficialTxt }}">{{ r.oficial }}</span>
+                    <span style="color:{{ r.setaColor }};font-weight:800;margin:0 3px">{{ r.setaIcon }}</span>
+                    <span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:{{ r.projetadoBg }};color:{{ r.projetadoTxt }}">{{ r.projetado }}</span>
+                  </td>
+                  <td style="padding:11px 16px;white-space:nowrap;color:#4F5D78;font-size:12px">{{ r.motivo }}</td>
+                  <td style="padding:11px 16px;white-space:nowrap;text-align:right;color:#0B1733;font-size:12px">{{ r.fmOficialFmt }} → {{ r.fmOperacionalFmt }}</td>
+                  <td style="padding:11px 8px;white-space:nowrap;text-align:center">
+                    <button onClick="{{ r.openTrend }}" title="Ver evolução do cliente" style="font-family:inherit;border:1px solid #dde1ee;background:#fff;color:#2850EF;border-radius:8px;padding:5px 8px;cursor:pointer;line-height:1;display:inline-flex;align-items:center"><span class="material-symbols-outlined" style="font-size:16px">finance_mode</span></button>
+                  </td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </sc-if>
 
     <sc-if value="{{ trendOpen }}" hint-placeholder-val="{{ false }}">
@@ -544,7 +699,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1340,&quot;height&quot;:900}}">
 class Component extends DCLogic {
-  state = { view:'geral', search:'', fAutoNoSku:'', fAtual:'', fDir:'', fReason:'', fVend:'', sortCol:'fm', sortDir:-1, vendSortCol:'total', vendSortDir:-1, page:0, sourceLabel:'Carregando fonte de dados...', sourceIsError:false, criteria:null, criteriaOpen:false, criteriaCardsOpen:false, trendRow:null, dashboardVisible:false, noAccess:false, dataMode:'oficial', operacionalReady:false };
+  state = { view:'geral', search:'', fAutoNoSku:'', fAtual:'', fDir:'', fReason:'', fVend:'', sortCol:'fm', sortDir:-1, vendSortCol:'total', vendSortDir:-1, page:0, sourceLabel:'Carregando fonte de dados...', sourceIsError:false, criteria:null, criteriaOpen:false, criteriaCardsOpen:false, trendRow:null, dashboardVisible:false, noAccess:false, dataMode:'oficial', operacionalReady:false, tSearch:'', tFDir:'', tFVend:'', tFMotivo:'', agrupamento:'coligada' };
 
   PER = 30;
   ORDER = {DIAMOND:4,PLATINUM:3,GOLD:2,STANDARD:1,'SEM SEGMENTAÇÃO':0};
@@ -556,6 +711,24 @@ class Component extends DCLogic {
   LEVELS = ['STANDARD','GOLD','PLATINUM','DIAMOND'];
   DEFAULT_CRITERIA = {DIAMOND:{fm:350000,mg:135000,mc:10,sk:7},PLATINUM:{fm:25000,mg:6300,mc:9,sk:5},GOLD:{fm:9500,mg:2300,mc:6,sk:3}};
 
+  // Aplica o deslocamento operacional numa linha oficial (r) usando o dado
+  // operacional correspondente (op, pode ser undefined). Reaproveitado tanto
+  // pelo toggle Oficial/Operacional (get data()) quanto pelo modal de evolução
+  // aberto a partir da aba Tendência das Mudanças, pra mostrar a mesma projeção.
+  aplicarOperacional(r, op){
+    const shift = (arr, novo) => [novo, ...(arr || []).slice(0, 6)];
+    const novoFm = op ? op.fm : r.fm, novoMg = op ? op.mg : r.mg, novoMb = op ? op.mb : r.mb;
+    const novoSk = op ? op.sk : r.sk, novoMc = op ? op.mc : r.mc;
+    return Object.assign({}, r, {
+      fm: novoFm, mg: novoMg, mb: novoMb, sk: novoSk, mc: novoMc,
+      fms: shift(r.fms, novoFm),
+      mgs: shift(r.mgs, novoMg),
+      mcs: shift(r.mcs, novoMc),
+      sks: shift(r.sks, novoSk),
+      mbs: shift(r.mbs, novoMb)
+    });
+  }
+
   get data(){
     const base = window.LABOR_DASH || {RAW:[],COUNTS:{auto:{},autoNoSku:{},atual:{},total:0}};
     if(this.state.dataMode !== 'operacional' || !window.LABOR_DASH_OPERACIONAL) return base;
@@ -565,31 +738,24 @@ class Component extends DCLogic {
     // desloca a serie de janelas uma posicao pra frente pra manter o espacamento
     // mensal coerente na comparacao (em vez de comparar contra o J2 oficial, que
     // ficaria 2 meses atras da previa de hoje).
-    const shift = (arr, novo) => [novo, ...(arr || []).slice(0, 6)];
-    const RAW = base.RAW.map(r=>{
-      const op = byId[r.id];
-      if(!op) return r;
-      return Object.assign({}, r, {
-        fm: op.fm, mg: op.mg, mb: op.mb, sk: op.sk, mc: op.mc,
-        fms: shift(r.fms, op.fm),
-        mgs: shift(r.mgs, op.mg),
-        mcs: shift(r.mcs, op.mc),
-        sks: shift(r.sks, op.sk),
-        mbs: shift(r.mbs, op.mb)
-      });
-    });
+    // Desloca TODOS os clientes oficiais, mesmo quem nao tem match na operacional
+    // (ex: saiu do filtro de ativo operacional) - senao a posicao J2 fica com o
+    // J2 oficial antigo (2 meses atras) em vez do J1 oficial, e a contagem de
+    // "Ultimo fechado" nao bate mais com "J1 - Atual" da visao Oficial.
+    const RAW = base.RAW.map(r=> this.aplicarOperacional(r, byId[r.id]));
     // Clientes que so existem na janela operacional (ex: primeira compra este mes,
     // sem nenhuma atividade no fechamento oficial) nao estao em base.RAW - entram
-    // como linhas novas, sem historico (janelas 2-7 zeradas, ja que nao existiam).
+    // como linhas novas. Historico marcado como null (nao zero) pra "Ultimo fechado"
+    // nao os contar como Standard - eles simplesmente nao existiam nessa janela.
     const idsOficiais = new Set(base.RAW.map(r => r.id));
-    const zeros = [0,0,0,0,0,0,0];
+    const nulls = [null,null,null,null,null,null];
     const novos = Object.values(byId)
       .filter(op => !idsOficiais.has(op.id))
       .map(op => ({
         id: op.id, col: op.col, cnpj: op.cnpj, no: op.no, vd: op.vd,
         fm: op.fm, mg: op.mg, mb: op.mb, sk: op.sk, mc: op.mc,
-        fms: [op.fm, ...zeros.slice(1)], mgs: [op.mg, ...zeros.slice(1)],
-        mcs: [op.mc, ...zeros.slice(1)], sks: [op.sk, ...zeros.slice(1)], mbs: [op.mb, ...zeros.slice(1)],
+        fms: [op.fm, ...nulls], mgs: [op.mg, ...nulls],
+        mcs: [op.mc, ...nulls], sks: [op.sk, ...nulls], mbs: [op.mb, ...nulls],
         fm7:0, mg7:0, m7:0, sk7:0, mb7:0
       }));
     const RAW_TOTAL = RAW.concat(novos);
@@ -617,9 +783,30 @@ class Component extends DCLogic {
     return true;
   }
 
+  // Clientes com Coligada aparecem 1x por loja, todos com os mesmos valores
+  // (o agrupamento ja acontece na consulta DAX) - isso infla contagens que
+  // deveriam refletir relacoes comerciais reais, nao registros de loja. Quando
+  // o modo "Por coligada" esta ativo, colapsa cada grupo numa unica linha.
+  agruparRows(rows){
+    if(this.state.agrupamento !== 'coligada') return rows;
+    const semColigada = rows.filter(r=>!r.col);
+    const porColigada = {};
+    rows.filter(r=>r.col).forEach(r=>{
+      (porColigada[r.col] = porColigada[r.col] || []).push(r);
+    });
+    const agrupados = Object.values(porColigada).map(membros=>{
+      const base = membros[0];
+      const extra = membros.length - 1;
+      return Object.assign({}, base, {
+        no: extra > 0 ? (base.no + ' (+' + extra + ' cliente' + (extra > 1 ? 's' : '') + ')') : base.no
+      });
+    });
+    return semColigada.concat(agrupados);
+  }
+
   filteredSorted(){
     const s = this.state;
-    let rows = this.data.RAW.filter(r=>this.matchesFilters(r, s, true));
+    let rows = this.agruparRows(this.data.RAW).filter(r=>this.matchesFilters(r, s, true));
     const {sortCol,sortDir} = s;
     rows.sort((a,b)=>{ let va=a[sortCol],vb=b[sortCol];
       if(typeof va==='string') return sortDir*va.localeCompare(vb || '');
@@ -629,7 +816,7 @@ class Component extends DCLogic {
 
   filteredForCards(){
     const s = this.state;
-    return this.data.RAW.filter(r=>this.matchesFilters(r, s, false));
+    return this.agruparRows(this.data.RAW).filter(r=>this.matchesFilters(r, s, false));
   }
 
   setFilter(patch){ this.setState({...patch, page:0}); }
@@ -637,6 +824,13 @@ class Component extends DCLogic {
   renderVals(){
     const C = this.data.COUNTS;
     const total = C.total || this.data.RAW.length;
+    // BASE TOTAL no cabecalho fica sempre com a contagem oficial, independente
+    // do toggle Oficial/Operacional - e uma referencia fixa, nao deve "piscar"
+    // quando o usuario troca de modo (o aviso de previa ja avisa disso). Mas
+    // respeita o agrupamento por Coligada, que e uma granularidade diferente.
+    const totalOficial = this.state.agrupamento === 'coligada'
+      ? this.agruparRows(window.LABOR_DASH?.RAW || []).length
+      : (window.LABOR_DASH?.COUNTS?.total || (window.LABOR_DASH?.RAW || []).length || total);
     const crit = this.criteria();
     const cardRows = this.filteredForCards();
     const createdCounts = this.LEVELS.reduce((acc,l)=>({...acc,[l]:0}),{});
@@ -646,9 +840,10 @@ class Component extends DCLogic {
     const j2Counts = this.LEVELS.reduce((acc,l)=>({...acc,[l]:0}),{});
     cardRows.forEach(r=>{ const l = this.criterioJ2(r); j2Counts[l] = (j2Counts[l] || 0) + 1; });
     const windows = this.windowLegend();
+    const windowsOficiais = this.windowLegend(true);
     const isOperacional = this.state.dataMode === 'operacional';
     const j1Period = isOperacional ? this.operacionalPeriod() : (windows.find(w => w.short === 'J1')?.period || '');
-    const j2Period = isOperacional ? (windows.find(w => w.short === 'J1')?.period || '') : (windows.find(w => w.short === 'J2')?.period || '');
+    const j2Period = isOperacional ? (windowsOficiais.find(w => w.short === 'J1')?.period || '') : (windows.find(w => w.short === 'J2')?.period || '');
     const j1Label = isOperacional ? 'Hoje (prévia)' : 'J1 - Atual';
     const j2Label = isOperacional ? 'Último fechado' : 'J2 - Anterior';
     const rules = [
@@ -700,7 +895,7 @@ class Component extends DCLogic {
       const padrao = this.criterioPadrao(r);
       const da=this.ORDER[padrao]??0, db=this.ORDER[this.criterioCriado(r)]??0;
       let icon='—', col='#b9c0d4';
-      if(db>da){icon='▲';col='#1F9E5A';} else if(db<da){icon='▼';col='#C0492A';}
+      if(db>da){icon='▲';col='#2F7A56';} else if(db<da){icon='▼';col='#9C4A3A';}
       const cri = this.criterioCriado(r);
       const fm2 = (r.fms && r.fms.length > 1) ? r.fms[1] : r.fm7;
       const mg2 = (r.mgs && r.mgs.length > 1) ? r.mgs[1] : r.mg7;
@@ -741,23 +936,28 @@ class Component extends DCLogic {
     const vendedores = [...new Set(this.data.RAW.map(r=>r.vd).filter(Boolean))].sort();
     const caret = (col)=> this.state.sortCol===col ? (this.state.sortDir<0?'↓':'↑') : '↕';
     const isVendedorView = this.state.view === 'vendedor';
+    const isTendenciaView = this.state.view === 'tendencia';
     const criteriaImpactData = isVendedorView ? this.criteriaImpactData() : {list:[], total:0};
     const vendorRows = isVendedorView ? this.vendorRowsData(this.state.vendSortCol, this.state.vendSortDir) : [];
     const vendCaret = (col)=> this.state.vendSortCol===col ? (this.state.vendSortDir<0?'↓':'↑') : '↕';
+    const tendencia = isTendenciaView ? this.tendenciaData() : null;
 
     return {
       dashboardVisible: this.state.dashboardVisible,
       noAccess: this.state.noAccess,
       recarregarPagina: ()=> window.location.reload(),
       dismissNoAccess: ()=> this.setState({noAccess:false}),
-      totalFmt: this.fmtInt(total),
+      totalFmt: this.fmtInt(totalOficial),
       sourceLabel: this.state.sourceLabel,
-      sourceColor: this.state.sourceIsError ? '#C0492A' : '#8A94AD',
+      sourceColor: this.state.sourceIsError ? '#9C4A3A' : '#8A94AD',
       headerSourceColor: this.state.sourceIsError ? '#FFD6CC' : 'rgba(255,255,255,.68)',
       rules, cards, criteriaRows, vendedores,
       simulationActive,
       segmentHeaderSubDisplay: simulationActive ? 'block' : 'none',
       modoOficialAtivo: this.state.dataMode === 'oficial',
+      criteriosGridRows: this.state.dataMode === 'oficial' ? '1fr' : '0fr',
+      criteriosGridMargin: this.state.dataMode === 'oficial' ? '18px' : '0px',
+      criteriosOpacity: this.state.dataMode === 'oficial' ? '1' : '0',
       modoOperacionalAtivo: this.state.dataMode === 'operacional',
       toggleContainerBg: this.state.dataMode === 'operacional' ? '#FFFBEB' : '#fff',
       toggleContainerBorder: this.state.dataMode === 'operacional' ? '#F5DFA0' : '#e6e9f2',
@@ -774,26 +974,57 @@ class Component extends DCLogic {
           this.setState({dataMode:'oficial'});
         }
       },
+      porLojaLabelColor: this.state.agrupamento === 'loja' ? '#0B1733' : '#8A94AD',
+      porColigadaLabelColor: this.state.agrupamento === 'coligada' ? '#2850EF' : '#8A94AD',
+      agrupamentoTrackBg: this.state.agrupamento === 'coligada' ? '#2850EF' : '#dde1ee',
+      agrupamentoThumbLeft: this.state.agrupamento === 'coligada' ? '21px' : '2px',
+      toggleAgrupamento: ()=> this.setState({agrupamento: this.state.agrupamento === 'coligada' ? 'loja' : 'coligada', page:0}),
       j1VsJ2Label: this.state.dataMode === 'operacional' ? 'Hoje vs último fechado' : 'J1 vs J2',
       direcaoLabel: this.state.dataMode === 'operacional' ? 'Último fechado → Hoje' : 'J2 → J1',
       criteriaOpen: this.state.criteriaOpen,
       criteriaToggleLabel: this.state.criteriaOpen ? 'Recolher' : 'Expandir',
       criteriaBodyMargin: this.state.criteriaOpen ? '10px' : '0',
+      criteriaGridRows: this.state.criteriaOpen ? '1fr' : '0fr',
+      criteriaOpacity: this.state.criteriaOpen ? '1' : '0',
       toggleCriteriaPanel: ()=> this.setState({criteriaOpen:!this.state.criteriaOpen}),
       criteriaCardsOpen: this.state.criteriaCardsOpen,
       criteriaCardsToggleLabel: this.state.criteriaCardsOpen ? 'Recolher' : 'Expandir',
       criteriaCardsHeaderMargin: this.state.criteriaCardsOpen ? '16px' : '0px',
+      criteriaCardsGridRows: this.state.criteriaCardsOpen ? '1fr' : '0fr',
+      criteriaCardsOpacity: this.state.criteriaCardsOpen ? '1' : '0',
       toggleCriteriaCardsPanel: ()=> this.setState({criteriaCardsOpen:!this.state.criteriaCardsOpen}),
-      viewGeral: !isVendedorView,
+      viewGeral: !isVendedorView && !isTendenciaView,
       viewVendedor: isVendedorView,
-      goToGeral: ()=> this.setState({view:'geral'}),
+      viewTendencia: isTendenciaView,
+      goToGeral: ()=> this.setState({view:'geral', dataMode:'oficial'}),
       goToVendedor: ()=> this.setState({view:'vendedor'}),
-      navGeralBg: isVendedorView ? '#fff' : '#2850EF',
-      navGeralTxt: isVendedorView ? '#0B1733' : '#fff',
-      navGeralBorder: isVendedorView ? '#dde1ee' : '#2850EF',
+      goToTendencia: ()=> { if(this.state.operacionalReady) this.setState({view:'tendencia'}); },
+      navGeralBg: !isVendedorView && !isTendenciaView ? '#2850EF' : '#fff',
+      navGeralTxt: !isVendedorView && !isTendenciaView ? '#fff' : '#0B1733',
+      navGeralBorder: !isVendedorView && !isTendenciaView ? '#2850EF' : '#dde1ee',
       navVendedorBg: isVendedorView ? '#2850EF' : '#fff',
       navVendedorTxt: isVendedorView ? '#fff' : '#0B1733',
       navVendedorBorder: isVendedorView ? '#2850EF' : '#dde1ee',
+      navTendenciaBg: isTendenciaView ? '#2850EF' : '#fff',
+      navTendenciaTxt: isTendenciaView ? '#fff' : '#0B1733',
+      navTendenciaBorder: isTendenciaView ? '#2850EF' : '#dde1ee',
+      tSearch: this.state.tSearch,
+      onTSearch: (e)=> this.setState({tSearch:e.target.value}),
+      tFDir: this.state.tFDir,
+      onTFDir: (e)=> this.setState({tFDir:e.target.value}),
+      tFVend: this.state.tFVend,
+      onTFVend: (e)=> this.setState({tFVend:e.target.value}),
+      tFMotivo: this.state.tFMotivo,
+      onTFMotivo: (e)=> this.setState({tFMotivo:e.target.value}),
+      tVendedores: tendencia ? tendencia.vendedores : [],
+      tRows: tendencia ? tendencia.rows : [],
+      tCountLabel: tendencia ? this.fmtInt(tendencia.rows.length) : '0',
+      tSubindoTotal: tendencia ? this.fmtInt(tendencia.subindo.total) : '0',
+      tSubindoBreakdown: tendencia ? tendencia.subindo.breakdown : [],
+      tDescendoTotal: tendencia ? this.fmtInt(tendencia.descendo.total) : '0',
+      tDescendoBreakdown: tendencia ? tendencia.descendo.breakdown : [],
+      tTopGanhando: tendencia ? tendencia.topGanhando : [],
+      tTopPerdendo: tendencia ? tendencia.topPerdendo : [],
       vendCountLabel: this.fmtInt(criteriaImpactData.total),
       criteriaImpact: criteriaImpactData.list,
       sortVendVd: ()=>this.toggleVendSort('vd'),
@@ -821,8 +1052,8 @@ class Component extends DCLogic {
         standard: this.fmtInt(v.STANDARD),
         up: this.fmtInt(v.up),
         down: this.fmtInt(v.down),
-        upColor: v.up ? '#1F9E5A' : '#8A94AD',
-        downColor: v.down ? '#C0492A' : '#8A94AD',
+        upColor: v.up ? '#2F7A56' : '#8A94AD',
+        downColor: v.down ? '#9C4A3A' : '#8A94AD',
         onClick: ()=> this.setState({view:'geral', fVend:v.vd, page:0})
       })),
       q: this.state,
@@ -845,8 +1076,8 @@ class Component extends DCLogic {
       trendCards: this.trendCards(this.state.trendRow),
       windowLegend: this.windowLegend(),
       windowLegendAsc: this.windowLegendAsc(),
-      analysisPeriod: this.state.dataMode === 'operacional' ? this.operacionalPeriod() : (this.windowLegend().find(w => w.short === 'J1')?.period || 'últimos 12 meses fechados'),
-      analysisPeriodLabel: this.state.dataMode === 'operacional' ? 'Período: prévia operacional' : 'Período: últimos 12 meses fechados',
+      analysisPeriod: this.windowLegend(true).find(w => w.short === 'J1')?.period || 'últimos 12 meses fechados',
+      analysisPeriodLabel: 'Período: últimos 12 meses fechados',
       closeTrend: ()=> this.setState({trendRow:null}),
       stopClick: (e)=> e.stopPropagation(),
       countLabel: this.fmtInt(rowsAll.length),
@@ -927,10 +1158,10 @@ class Component extends DCLogic {
 
   deltaColor(base, ref){
     if(!ref && !base) return '#8A94AD';
-    if(!ref) return '#1F9E5A';
+    if(!ref) return '#2F7A56';
     const pct = ((base-ref)/ref)*100;
     if(Math.abs(pct)<0.05) return '#8A94AD';
-    return pct>0 ? '#1F9E5A' : '#C0492A';
+    return pct>0 ? '#2F7A56' : '#9C4A3A';
   }
 
   metricDeltaLabel(current, base){
@@ -948,7 +1179,7 @@ class Component extends DCLogic {
     if(!base) return '#8A94AD';
     const pct = ((current-base)/base)*100;
     if(Math.abs(pct)<0.05) return '#8A94AD';
-    return pct>0 ? '#1F9E5A' : '#C0492A';
+    return pct>0 ? '#2F7A56' : '#9C4A3A';
   }
 
   trendCards(r){
@@ -983,8 +1214,8 @@ class Component extends DCLogic {
     });
   }
 
-  windowLegend(){
-    const isOperacional = this.state.dataMode === 'operacional';
+  windowLegend(forceOficial){
+    const isOperacional = !forceOficial && this.state.dataMode === 'operacional';
     const today = new Date();
     const base = new Date(today.getFullYear(), today.getMonth(), 0);
     return Array.from({length:7}, (_, i)=>{
@@ -1198,7 +1429,9 @@ class Component extends DCLogic {
   }
 
   criterioJ2(r){
-    return this.criterioPorValores((r.fms||[])[1], (r.mgs||[])[1], (r.mbs||[])[1], (r.mcs||[])[1], (r.sks||[])[1], this.DEFAULT_CRITERIA);
+    const fm2 = (r.fms||[])[1];
+    if(fm2 == null) return 'SEM SEGMENTAÇÃO';
+    return this.criterioPorValores(fm2, (r.mgs||[])[1], (r.mbs||[])[1], (r.mcs||[])[1], (r.sks||[])[1], this.DEFAULT_CRITERIA);
   }
 
   windowDirection(r){
@@ -1253,6 +1486,133 @@ class Component extends DCLogic {
       pctW: Math.round((counts[f]/maxCount)*100)+'%'
     })).sort((a,b)=>b.count-a.count);
     return {list, total};
+  }
+
+  motivoMudanca(r, op){
+    const fields = [['fm','Faturamento'], ['mg','Cash Margin'], ['sk','Média SKUs'], ['mc','Meses c/ compra']];
+    const impacted = fields.filter(([field])=>{
+      const v1 = field==='sk' ? Math.round(r[field]||0) : (r[field]||0);
+      const v2 = field==='sk' ? Math.round(op[field]||0) : (op[field]||0);
+      return ['DIAMOND','PLATINUM','GOLD'].some(level=>{
+        const min = this.criteriaValue(this.DEFAULT_CRITERIA[level]?.[field]);
+        return (v1 >= min) !== (v2 >= min);
+      });
+    }).map(([,label])=>label);
+    return impacted.length ? impacted.join(' + ') : 'Combinação de critérios';
+  }
+
+  tendenciaData(){
+    const officialRAW = window.LABOR_DASH?.RAW || [];
+    const opInfo = window.LABOR_DASH_OPERACIONAL;
+    const byId = opInfo ? (opInfo.byId || {}) : {};
+    const s = this.state;
+    const q = (s.tSearch || '').toLowerCase();
+    const qDigits = q.replace(/\D/g, '');
+
+    const all = [];
+    officialRAW.forEach(r=>{
+      const op = byId[r.id];
+      if(!op) return;
+      const oficial = this.criterioPadrao(r);
+      const projetado = this.criterioPorValores(op.fm, op.mg, op.mb, op.mc, op.sk, this.DEFAULT_CRITERIA);
+      if(oficial === projetado) return;
+      const oOrder = this.ORDER[oficial] ?? 0, pOrder = this.ORDER[projetado] ?? 0;
+      all.push({
+        r, op, id:r.id, no:r.no, vd:r.vd, col:r.col, cnpj:r.cnpj,
+        oficial, projetado,
+        direcao: pOrder > oOrder ? 'up' : 'down',
+        motivo: this.motivoMudanca(r, op),
+        fmOficial:r.fm, fmOperacional:op.fm
+      });
+    });
+
+    // Mesma logica de agrupamento por Coligada usada na Visao Oficial (todo
+    // membro de uma Coligada tem oficial/projetado/motivo identicos, ja que a
+    // classificacao e calculada no nivel da Coligada) - colapsa numa linha so.
+    let agrupado = all;
+    if(this.state.agrupamento === 'coligada'){
+      const semColigada = all.filter(x=>!x.col);
+      const porColigada = {};
+      all.filter(x=>x.col).forEach(x=>{ (porColigada[x.col] = porColigada[x.col] || []).push(x); });
+      const agrupados = Object.values(porColigada).map(membros=>{
+        const base = membros[0];
+        const extra = membros.length - 1;
+        return Object.assign({}, base, {
+          no: extra > 0 ? (base.no + ' (+' + extra + ' cliente' + (extra > 1 ? 's' : '') + ')') : base.no
+        });
+      });
+      agrupado = semColigada.concat(agrupados);
+    }
+
+    const vendedores = [...new Set(agrupado.map(x=>x.vd).filter(Boolean))].sort();
+
+    const filtered = agrupado.filter(x=>{
+      if(s.tFDir && x.direcao !== s.tFDir) return false;
+      if(s.tFVend && x.vd !== s.tFVend) return false;
+      if(s.tFMotivo){
+        if(s.tFMotivo === 'Combinação'){ if(x.motivo !== 'Combinação de critérios') return false; }
+        else if(!x.motivo.includes(s.tFMotivo)) return false;
+      }
+      if(q){
+        const matchesTexto = x.no.toLowerCase().includes(q) || x.id.includes(q) || (x.col||'').includes(q) || (x.cnpj||'').includes(q);
+        const matchesDigitos = qDigits && ((x.cnpj||'').includes(qDigits) || x.id.includes(qDigits) || (x.col||'').includes(qDigits));
+        if(!matchesTexto && !matchesDigitos) return false;
+      }
+      return true;
+    });
+
+    const breakdown = (dir)=>{
+      const seta = dir === 'up' ? '↑' : '↓';
+      const setaColor = dir === 'up' ? '#2F7A56' : '#9C4A3A';
+      const group = {};
+      agrupado.filter(x=>x.direcao===dir).forEach(x=>{
+        const key = x.oficial + '|' + x.projetado;
+        group[key] = (group[key]||0)+1;
+      });
+      return Object.entries(group).sort((a,b)=>b[1]-a[1]).map(([k,count])=>{
+        const [de, para] = k.split('|');
+        return {
+          count, de, deBg:this.BG[de], deTxt:this.TXT[de],
+          para, paraBg:this.BG[para], paraTxt:this.TXT[para],
+          seta, setaColor
+        };
+      });
+    };
+
+    const rows = filtered.map(x=>({
+      id:x.id, no:x.no, sub:x.id + (x.col? ' · col. '+x.col : ''), vd:x.vd,
+      oficialBg:this.BG[x.oficial], oficialTxt:this.TXT[x.oficial], oficial:x.oficial,
+      projetadoBg:this.BG[x.projetado], projetadoTxt:this.TXT[x.projetado], projetado:x.projetado,
+      setaIcon: x.direcao==='up' ? '▲' : '▼',
+      setaColor: x.direcao==='up' ? '#2F7A56' : '#9C4A3A',
+      motivo:x.motivo,
+      fmOficialFmt:this.fmtBRL(x.fmOficial), fmOperacionalFmt:this.fmtBRL(x.fmOperacional),
+      openTrend: ()=> this.setState({trendRow: this.aplicarOperacional(x.r, x.op), dataMode:'operacional'})
+    }));
+
+    // Ranking por vendedor - sempre calculado em cima da base completa (nao
+    // respeita os filtros da tabela abaixo), igual os totais dos cards Subindo/
+    // Descendo, pra servir como visao geral independente do que esta filtrado.
+    const porVendedor = {};
+    agrupado.forEach(x=>{
+      const vd = x.vd || '(sem vendedor)';
+      if(!porVendedor[vd]) porVendedor[vd] = {vd, up:0, down:0};
+      if(x.direcao === 'up') porVendedor[vd].up++; else porVendedor[vd].down++;
+    });
+    const ranking = Object.values(porVendedor);
+    const maxUp = Math.max(...ranking.map(v=>v.up), 1);
+    const maxDown = Math.max(...ranking.map(v=>v.down), 1);
+    const topGanhando = ranking.filter(v=>v.up>0).sort((a,b)=>b.up-a.up).slice(0,5)
+      .map(v=>({ vd:v.vd, countFmt:this.fmtInt(v.up), w: Math.round((v.up/maxUp)*100)+'%' }));
+    const topPerdendo = ranking.filter(v=>v.down>0).sort((a,b)=>b.down-a.down).slice(0,5)
+      .map(v=>({ vd:v.vd, countFmt:this.fmtInt(v.down), w: Math.round((v.down/maxDown)*100)+'%' }));
+
+    return {
+      rows, vendedores,
+      subindo:{ total: agrupado.filter(x=>x.direcao==='up').length, breakdown: breakdown('up') },
+      descendo:{ total: agrupado.filter(x=>x.direcao==='down').length, breakdown: breakdown('down') },
+      topGanhando, topPerdendo
+    };
   }
 
   matchesWindowChangeReason(r, reason){
