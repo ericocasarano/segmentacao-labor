@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;icon_names=finance_mode" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;icon_names=finance_mode,help,arrow_back,arrow_forward,close,motion_play" />
 <script>
 window.LABOR_DASH_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r/sites/DashboardSegmentaoClientes/Shared%20Documents/labor-data.js?d=wee5043ccac7d4f72a7d23009f68748ca&csf=1&web=1&e=kcd93x';
 window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r/sites/DashboardSegmentaoClientes/Shared%20Documents/labor-data-operacional.js?d=w8c871fb163824d8ea9a32725cbe0a99d&csf=1&web=1&e=hhoikN';
@@ -54,7 +54,10 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
         <p style="font-size:11.5px;margin:10px 0 0;color:{{ sourceColor }};font-weight:600">{{ sourceLabel }}</p>
       </div>
       <div style="display:flex;align-items:center;gap:18px;flex-shrink:0">
-        <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e6e9f2;border-radius:12px;padding:10px 16px;box-shadow:0 6px 18px rgba(11,23,51,.05)">
+        <button onClick="{{ startTour }}" title="Fazer tour guiado do dashboard" style="font-family:inherit;font-size:12.5px;font-weight:700;color:#2850EF;background:#eef1fe;border:none;border-radius:10px;padding:9px 13px;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap">
+          <span class="material-symbols-outlined" style="font-size:17px">motion_play</span> Tour
+        </button>
+        <div id="tour-total" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e6e9f2;border-radius:12px;padding:10px 16px;box-shadow:0 6px 18px rgba(11,23,51,.05)">
           <div style="text-align:right">
             <div style="font-size:10.5px;color:#6A748F;font-weight:700;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Base total</div>
             <div style="font-size:22px;font-weight:800;color:#001E50;line-height:1.1;margin-top:3px;white-space:nowrap">{{ totalFmt }}</div>
@@ -70,12 +73,12 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
 
     <!-- Navegação -->
     <nav style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap">
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div id="tour-nav" style="display:flex;gap:8px;flex-wrap:wrap">
         <button onClick="{{ goToGeral }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navGeralBorder }};background:{{ navGeralBg }};color:{{ navGeralTxt }}">Visão Oficial</button>
         <button onClick="{{ goToVendedor }}" style="display:none;font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navVendedorBorder }};background:{{ navVendedorBg }};color:{{ navVendedorTxt }}">Visão por Vendedor</button>
-        <button onClick="{{ goToTendencia }}" disabled="{{ modoOperacionalDisabled }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navTendenciaBorder }};background:{{ navTendenciaBg }};color:{{ navTendenciaTxt }};opacity:{{ modoOperacionalOpacity }}">Tendência das Mudanças</button>
+        <button id="tour-tendencia-btn" onClick="{{ goToTendencia }}" disabled="{{ modoOperacionalDisabled }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navTendenciaBorder }};background:{{ navTendenciaBg }};color:{{ navTendenciaTxt }};opacity:{{ modoOperacionalOpacity }}">Tendência das Mudanças</button>
       </div>
-      <div style="display:flex;align-items:center;gap:9px;flex-shrink:0;background:#fff;border:1px solid #e6e9f2;border-radius:12px;padding:8px 14px">
+      <div id="tour-agrupamento" style="display:flex;align-items:center;gap:9px;flex-shrink:0;background:#fff;border:1px solid #e6e9f2;border-radius:12px;padding:8px 14px">
         <span style="font-family:inherit;font-size:12.5px;font-weight:700;color:{{ porLojaLabelColor }}">Por cliente</span>
         <button onClick="{{ toggleAgrupamento }}" title="Alternar entre visão por cliente e por coligada" style="position:relative;width:42px;height:23px;border-radius:999px;border:none;cursor:pointer;background:{{ agrupamentoTrackBg }};padding:0;flex-shrink:0">
           <span style="position:absolute;top:2px;left:{{ agrupamentoThumbLeft }};width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(11,23,51,.3);transition:left .15s ease"></span>
@@ -87,7 +90,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
     <sc-if value="{{ viewGeral }}" hint-placeholder-val="{{ true }}">
 
     <!-- Toggle Oficial / Operacional -->
-    <section style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:{{ toggleContainerBg }};border:1px solid {{ toggleContainerBorder }};border-radius:16px;padding:0 16px;height:50px;margin-bottom:18px">
+    <section id="tour-toggle-modo" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:{{ toggleContainerBg }};border:1px solid {{ toggleContainerBorder }};border-radius:16px;padding:0 16px;height:50px;margin-bottom:18px">
       <div style="display:flex;align-items:center;gap:10px">
         <div style="display:flex;align-items:center;gap:9px">
           <span style="font-family:inherit;font-size:12.5px;font-weight:700;color:{{ oficialLabelColor }}">Oficial</span>
@@ -108,7 +111,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
     <div style="display:grid;grid-template-rows:{{ criteriosGridRows }};transition:grid-template-rows .35s ease,margin-bottom .35s ease;margin-bottom:{{ criteriosGridMargin }}">
     <div style="overflow:hidden;min-height:0;opacity:{{ criteriosOpacity }};transition:opacity .2s ease">
     <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:20px 22px">
-      <div class="lbr-expand-header" onClick="{{ toggleCriteriaCardsPanel }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:{{ criteriaCardsHeaderMargin }};padding:8px;margin-left:-8px;margin-right:-8px;margin-top:-8px;border-radius:12px">
+      <div id="tour-criterios" class="lbr-expand-header" onClick="{{ toggleCriteriaCardsPanel }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:{{ criteriaCardsHeaderMargin }};padding:8px;margin-left:-8px;margin-right:-8px;margin-top:-8px;border-radius:12px">
         <div style="display:flex;align-items:center;gap:8px">
           <span style="width:26px;height:26px;border-radius:8px;background:#eef1fe;color:#2850EF;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
@@ -137,7 +140,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
       </div>
       </div>
       </div>
-      <div style="margin-top:16px;padding-top:14px;border-top:1px solid #eef0f7">
+      <div id="tour-simulacao" style="margin-top:16px;padding-top:14px;border-top:1px solid #eef0f7">
         <div class="lbr-expand-header" onClick="{{ toggleCriteriaPanel }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:{{ criteriaBodyMargin }};padding:8px;margin-left:-8px;margin-right:-8px;margin-top:-8px;border-radius:12px">
           <div>
             <div style="display:flex;align-items:center;gap:8px">
@@ -190,7 +193,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
     </div>
 
     <!-- Cards de resumo -->
-    <section style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px">
+    <section id="tour-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px">
       <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
         <div onClick="{{ c.onClick }}" style="{{ c.cardStyle }}">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
@@ -240,7 +243,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
     </section>
 
     <!-- Filtros -->
-    <section style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:16px 18px;margin-bottom:14px">
+    <section id="tour-filtros" style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:16px 18px;margin-bottom:14px">
       <div style="flex:2;min-width:220px">
         <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Buscar cliente</label>
         <div style="position:relative">
@@ -310,7 +313,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
     </div>
 
     <!-- Tabela -->
-    <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;overflow:hidden">
+    <section id="tour-tabela" style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;overflow:hidden">
       <div class="lbr-scroll" style="overflow-x:auto">
         <table class="lbr-fit-table" style="width:100%;border-collapse:collapse;font-size:11.5px;min-width:0">
           <colgroup>
@@ -585,6 +588,36 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
       </section>
     </sc-if>
 
+    <!-- Tour guiado -->
+    <sc-if value="{{ tourActive }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ tourSpotlightStyle }}"></div>
+      <div style="{{ tourTooltipStyle }};background:#fff;border-radius:14px;box-shadow:0 18px 46px rgba(11,23,51,.28);padding:16px 18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px">
+          <span style="font-size:10.5px;font-weight:800;color:#2850EF;text-transform:uppercase;letter-spacing:.06em">{{ tourStepLabel }}</span>
+          <button onClick="{{ endTour }}" title="Pular tour" style="border:none;background:transparent;color:#8A94AD;cursor:pointer;padding:2px;display:flex;align-items:center">
+            <span class="material-symbols-outlined" style="font-size:18px">close</span>
+          </button>
+        </div>
+        <div style="font-size:14px;font-weight:800;color:#0B1733;margin-bottom:6px">{{ tourTitle }}</div>
+        <div style="font-size:12.5px;color:#4F5D78;line-height:1.5;margin-bottom:16px">
+          <sc-for list="{{ tourLines }}" as="line" hint-placeholder-count="3">
+            <div style="margin-bottom:4px"><span style="font-weight:800;color:#0B1733">{{ line.bold }}</span>{{ line.text }}</div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <button onClick="{{ endTour }}" style="font-family:inherit;font-size:12px;font-weight:700;color:#8A94AD;background:transparent;border:none;cursor:pointer;padding:6px 4px">Pular tour</button>
+          <div style="display:flex;gap:8px">
+            <button onClick="{{ prevTourStep }}" disabled="{{ tourIsFirst }}" style="font-family:inherit;font-size:12.5px;font-weight:700;color:#0B1733;background:#fff;border:1px solid #dde1ee;border-radius:8px;padding:7px 12px;cursor:pointer;display:flex;align-items:center;gap:4px;opacity:{{ tourPrevOpacity }}">
+              <span class="material-symbols-outlined" style="font-size:16px">arrow_back</span>
+            </button>
+            <button onClick="{{ nextTourStep }}" style="font-family:inherit;font-size:12.5px;font-weight:700;color:#fff;background:#2850EF;border:none;border-radius:8px;padding:7px 14px;cursor:pointer;display:flex;align-items:center;gap:6px">
+              {{ tourNextLabel }} <span class="material-symbols-outlined" style="font-size:16px">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ trendOpen }}" hint-placeholder-val="{{ false }}">
       <div onClick="{{ closeTrend }}" style="position:fixed;inset:0;background:rgba(11,23,51,.38);z-index:50;display:flex;align-items:center;justify-content:center;padding:4px">
         <div onClick="{{ stopClick }}" style="background:#fff;border:1px solid #dfe3ef;border-radius:16px;width:min(1200px,99vw);max-height:99vh;overflow:auto;box-shadow:0 22px 70px rgba(11,23,51,.24)">
@@ -699,7 +732,22 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1340,&quot;height&quot;:900}}">
 class Component extends DCLogic {
-  state = { view:'geral', search:'', fAutoNoSku:'', fAtual:'', fDir:'', fReason:'', fVend:'', sortCol:'fm', sortDir:-1, vendSortCol:'total', vendSortDir:-1, page:0, sourceLabel:'Carregando fonte de dados...', sourceIsError:false, criteria:null, criteriaOpen:false, criteriaCardsOpen:false, trendRow:null, dashboardVisible:false, noAccess:false, dataMode:'oficial', operacionalReady:false, tSearch:'', tFDir:'', tFVend:'', tFMotivo:'', agrupamento:'coligada' };
+  state = { view:'geral', search:'', fAutoNoSku:'', fAtual:'', fDir:'', fReason:'', fVend:'', sortCol:'fm', sortDir:-1, vendSortCol:'total', vendSortDir:-1, page:0, sourceLabel:'Carregando fonte de dados...', sourceIsError:false, criteria:null, criteriaOpen:false, criteriaCardsOpen:false, trendRow:null, dashboardVisible:false, noAccess:false, dataMode:'oficial', operacionalReady:false, tSearch:'', tFDir:'', tFVend:'', tFMotivo:'', agrupamento:'coligada', tourActive:false, tourStep:0 };
+
+  TOUR_STEPS = [
+    {target:'#tour-total', title:'Base de clientes', text:'Total de clientes ativos na base analisada. O número muda conforme o agrupamento escolhido (por cliente ou por Coligada).'},
+    {target:'#tour-nav', title:'Navegação', lines:[
+      {text:'Alterne entre a Visão Oficial e a Tendência das Mudanças:'},
+      {bold:'Visão Oficial:', text:' cards, tabela completa e filtros com a segmentação atual dos clientes (Últimos 12 meses fechados).'},
+      {bold:'Tendência das Mudanças:', text:' mostra quem está prestes a subir ou descer de segmento com o mês vigente em andamento.'}
+    ]},
+    {target:'#tour-agrupamento', title:'Por cliente ou por Coligada', text:'Clientes de uma mesma Coligada aparecem agrupados. Ative "Por cliente" para ver os clientes separados.'},
+    {target:'#tour-toggle-modo', title:'Oficial vs Operacional', text:'"Oficial" é o dado fechado do último mês. "Operacional" é uma prévia dinâmica, recalculada todo dia, mostrando como ficaria a segmentação se o mês fechasse hoje.'},
+    {target:'#tour-criterios', title:'Critérios por segmento', text:'Veja os critérios oficiais (Faturamento, Cash Margin, SKUs e Meses c/ compra) exigidos em cada segmento.'},
+    {target:'#tour-simulacao', title:'Simulação temporária', text:'Simule temporariamente novos valores de critério pra testar cenários — não afeta o dado oficial, e volta ao padrão ao atualizar a página.'},
+    {target:'#tour-cards', title:'Resumo por segmento', text:'Quantos clientes em cada segmento, e quantos subiram ou desceram desde a janela anterior.'},
+    {target:'#tour-filtros', title:'Busca e filtros', text:'Busque por nome, ID, CNPJ ou Coligada, e filtre por vendedor ou direção de mudança de segmento.'}
+  ];
 
   PER = 30;
   ORDER = {DIAMOND:4,PLATINUM:3,GOLD:2,STANDARD:1,'SEM SEGMENTAÇÃO':0};
@@ -710,6 +758,63 @@ class Component extends DCLogic {
   RING  = {DIAMOND:'#dfe5fd',PLATINUM:'#d4dbec',GOLD:'#f1e2c6',STANDARD:'#e4e7f0','SEM SEGMENTAÇÃO':'#e4e7f0'};
   LEVELS = ['STANDARD','GOLD','PLATINUM','DIAMOND'];
   DEFAULT_CRITERIA = {DIAMOND:{fm:350000,mg:135000,mc:10,sk:7},PLATINUM:{fm:25000,mg:6300,mc:9,sk:5},GOLD:{fm:9500,mg:2300,mc:6,sk:3}};
+
+  // Trava a rolagem manual da pagina enquanto o tour esta ativo - o tour ja
+  // rola sozinho ate cada elemento, entao rolagem manual so serve pra tirar
+  // o destaque do lugar (o "position:fixed" nao acompanha scroll sozinho).
+  tourResizeHandler = ()=> this.forceUpdate();
+
+  startTour(){
+    this.setState({view:'geral', dataMode:'oficial', tourActive:true, tourStep:0});
+    this.scrollToTourStep(0);
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('resize', this.tourResizeHandler);
+  }
+
+  endTour(){
+    this.setState({tourActive:false});
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    window.removeEventListener('resize', this.tourResizeHandler);
+  }
+
+  nextTourStep(){
+    const next = this.state.tourStep + 1;
+    if(next >= this.TOUR_STEPS.length){ this.endTour(); return; }
+    this.scrollToTourStep(next);
+  }
+
+  prevTourStep(){
+    const prev = Math.max(0, this.state.tourStep - 1);
+    this.scrollToTourStep(prev);
+  }
+
+  // Rola ate o alvo e SO troca de etapa depois que a rolagem termina - se
+  // trocasse a etapa na hora, o destaque calculava a posicao antes de rolar,
+  // renderizava ali, e depois pulava de novo pra posicao final (efeito de
+  // "descer e subir"). Assim, so existe uma unica transicao suave.
+  scrollToTourStep(idx){
+    const step = this.TOUR_STEPS[idx];
+    if(!step) return;
+    const el = document.querySelector(step.target);
+    if(!el){ this.setState({tourStep: idx}); return; }
+    // Elementos mais altos que a tela (ex: a tabela inteira) devem alinhar
+    // pelo topo, senao "center" deixa o cabecalho fora da viewport.
+    const block = el.offsetHeight > window.innerHeight * 0.8 ? 'start' : 'center';
+    el.scrollIntoView({behavior:'smooth', block});
+    setTimeout(()=> this.setState({tourStep: idx}), 380);
+  }
+
+  tourRect(){
+    if(!this.state.tourActive) return null;
+    const step = this.TOUR_STEPS[this.state.tourStep];
+    if(!step) return null;
+    const el = document.querySelector(step.target);
+    if(!el) return null;
+    const r = el.getBoundingClientRect();
+    return {top:r.top, left:r.left, width:r.width, height:r.height};
+  }
 
   // Aplica o deslocamento operacional numa linha oficial (r) usando o dado
   // operacional correspondente (op, pode ser undefined). Reaproveitado tanto
@@ -942,7 +1047,45 @@ class Component extends DCLogic {
     const vendCaret = (col)=> this.state.vendSortCol===col ? (this.state.vendSortDir<0?'↓':'↑') : '↕';
     const tendencia = isTendenciaView ? this.tendenciaData() : null;
 
+    // Tour guiado: calcula posicao do elemento-alvo do passo atual e monta os
+    // estilos do "spotlight" (recorte iluminado) e da caixa de texto.
+    const tourRect = this.tourRect();
+    const tourStepIdx = this.state.tourStep;
+    const tourStepData = this.TOUR_STEPS[tourStepIdx] || {};
+    let tourSpotlightStyle = '', tourTooltipStyle = '';
+    if(tourRect){
+      const pad = 8;
+      // Clampa o retangulo do spotlight aos limites da viewport - elementos
+      // maiores que a tela (ex: a tabela inteira com 30 linhas) nao devem
+      // gerar um recorte gigante fora de posicao, so a parte visivel importa.
+      const rawTop = tourRect.top - pad, rawLeft = tourRect.left - pad;
+      const rawBottom = tourRect.top + tourRect.height + pad, rawRight = tourRect.left + tourRect.width + pad;
+      const top = Math.max(0, rawTop), left = Math.max(0, rawLeft);
+      const bottom = Math.min(window.innerHeight, rawBottom), right = Math.min(window.innerWidth, rawRight);
+      const w = Math.max(40, right - left), h = Math.max(40, bottom - top);
+      tourSpotlightStyle = 'position:fixed;top:'+top+'px;left:'+left+'px;width:'+w+'px;height:'+h+'px;border-radius:12px;box-shadow:0 0 0 9999px rgba(11,23,51,.68);outline:2px solid #2850EF;outline-offset:2px;pointer-events:none;z-index:200;transition:top .3s ease,left .3s ease,width .3s ease,height .3s ease';
+      const tooltipW = 320;
+      const spaceBelow = window.innerHeight - (top + h);
+      const showBelow = spaceBelow > 170;
+      const ttLeftRaw = left + w/2 - tooltipW/2;
+      const ttLeft = Math.max(16, Math.min(ttLeftRaw, window.innerWidth - tooltipW - 16));
+      tourTooltipStyle = 'position:fixed;left:'+ttLeft+'px;width:'+tooltipW+'px;z-index:201;' +
+        (showBelow ? ('top:'+(top+h+14)+'px') : ('bottom:'+(window.innerHeight-top+14)+'px'));
+    }
+
     return {
+      tourActive: this.state.tourActive && !!tourRect,
+      tourSpotlightStyle, tourTooltipStyle,
+      tourTitle: tourStepData.title || '',
+      tourLines: (tourStepData.lines || [{text: tourStepData.text || ''}]).map(l=>({bold:l.bold||'', text:l.text||''})),
+      tourStepLabel: (tourStepIdx+1) + ' de ' + this.TOUR_STEPS.length,
+      tourIsFirst: tourStepIdx === 0,
+      tourPrevOpacity: tourStepIdx === 0 ? '.4' : '1',
+      tourNextLabel: tourStepIdx === this.TOUR_STEPS.length - 1 ? 'Concluir' : 'Próximo',
+      startTour: ()=> this.startTour(),
+      nextTourStep: ()=> this.nextTourStep(),
+      prevTourStep: ()=> this.prevTourStep(),
+      endTour: ()=> this.endTour(),
       dashboardVisible: this.state.dashboardVisible,
       noAccess: this.state.noAccess,
       recarregarPagina: ()=> window.location.reload(),
