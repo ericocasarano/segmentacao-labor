@@ -11,7 +11,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-<script src="labor-data-source.js?v=20260723"></script>
+<script>
+window.LABOR_DASH_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r/sites/DashboardSegmentaoClientes/Shared%20Documents/labor-data.js?d=wee5043ccac7d4f72a7d23009f68748ca&csf=1&web=1&e=kcd93x';
+window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r/sites/DashboardSegmentaoClientes/Shared%20Documents/labor-data-operacional.js?d=w8c871fb163824d8ea9a32725cbe0a99d&csf=1&web=1&e=hhoikN';
+</script>
+<script src="labor-data-loader.js?v=20260916"></script>
 <style>
   html,body{margin:0;background:#F4F5FA}
   *{box-sizing:border-box}
@@ -20,13 +24,15 @@
   .lbr-scroll::-webkit-scrollbar-thumb{background:#d4d8e8;border-radius:8px}
   .lbr-fit-table{table-layout:fixed;min-width:0!important}
   .lbr-fit-table th{white-space:normal!important;line-height:1.15;vertical-align:bottom;padding:11px 8px!important;word-break:normal;letter-spacing:.025em!important;font-size:10px!important}
-  .lbr-fit-table th:nth-child(1),.lbr-fit-table th:nth-child(2){padding-left:14px!important;padding-right:14px!important;text-align:center!important}
-  .lbr-fit-table td:nth-child(1),.lbr-fit-table td:nth-child(2){text-align:center!important}
+  .lbr-fit-table th.lbr-badge-cell{padding-left:14px!important;padding-right:14px!important;text-align:center!important}
+  .lbr-fit-table td.lbr-badge-cell{text-align:center!important}
   .lbr-fit-table td{padding:9px 5px!important;white-space:normal!important;vertical-align:middle}
-  .lbr-fit-table td:nth-child(1) span,.lbr-fit-table td:nth-child(2) span{white-space:normal;line-height:1.15;text-align:center;max-width:100%}
+  .lbr-fit-table td.lbr-badge-cell span{white-space:normal;line-height:1.15;text-align:center;max-width:100%}
   .lbr-fit-table td:nth-child(3),.lbr-fit-table td:nth-child(4){overflow-wrap:anywhere}
   .lbr-fit-table td:nth-child(5),.lbr-fit-table td:nth-child(6),.lbr-fit-table td:nth-child(7),.lbr-fit-table td:nth-child(8),.lbr-fit-table td:nth-child(9),.lbr-fit-table td:nth-child(10){white-space:nowrap!important}
   .lbr-window-tip:hover .lbr-window-pop{display:block!important}
+  .lbr-expand-header{cursor:pointer;transition:background-color .15s ease,box-shadow .15s ease}
+  .lbr-expand-header:hover{background:#F4F6FC;box-shadow:inset 0 0 0 1px #dde4f5}
   @keyframes lbrbar{from{width:0}}
 </style>
 </helmet>
@@ -40,7 +46,7 @@
         <div style="font-size:10.5px;font-weight:800;color:#2850EF;text-transform:uppercase;letter-spacing:.12em;margin-bottom:7px">Dashboard executivo</div>
         <h1 style="font-size:30px;font-weight:800;letter-spacing:0;margin:0;line-height:1.05;color:#0B1733">Segmentação de clientes</h1>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:11px">
-          <span style="font-size:12px;font-weight:700;color:#4F5D78;background:#f3f5fb;border:1px solid #e4e8f4;border-radius:999px;padding:6px 10px">Período: últimos 12 meses fechados · {{ analysisPeriod }}</span>
+          <span style="font-size:12px;font-weight:700;color:#4F5D78;background:#f3f5fb;border:1px solid #e4e8f4;border-radius:999px;padding:6px 10px">{{ analysisPeriodLabel }} · {{ analysisPeriod }}</span>
           <span style="font-size:12px;font-weight:700;color:#4F5D78;background:#f3f5fb;border:1px solid #e4e8f4;border-radius:999px;padding:6px 10px">Tipo de Cliente: Revenda</span>
         </div>
         <p style="font-size:11.5px;margin:10px 0 0;color:{{ sourceColor }};font-weight:600">{{ sourceLabel }}</p>
@@ -62,18 +68,46 @@
 
     <!-- Navegação -->
     <nav style="display:flex;gap:8px;margin-bottom:18px">
-      <button onClick="{{ goToGeral }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navGeralBorder }};background:{{ navGeralBg }};color:{{ navGeralTxt }}">Visão Geral</button>
-      <button onClick="{{ goToVendedor }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navVendedorBorder }};background:{{ navVendedorBg }};color:{{ navVendedorTxt }}">Visão por Vendedor</button>
+      <button onClick="{{ goToGeral }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navGeralBorder }};background:{{ navGeralBg }};color:{{ navGeralTxt }}">Visão Oficial</button>
+      <button onClick="{{ goToVendedor }}" style="display:none;font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;border:1px solid {{ navVendedorBorder }};background:{{ navVendedorBg }};color:{{ navVendedorTxt }}">Visão por Vendedor</button>
     </nav>
 
     <sc-if value="{{ viewGeral }}" hint-placeholder-val="{{ true }}">
 
-    <!-- Critérios por cluster -->
-    <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:20px 22px;margin-bottom:18px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
-        <h3 style="font-size: 16px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: .05em; color: #0B1733">CRITÉRIOS PRÉ-DEFINIDOS POR SEGMENTO</h3>
-        
+    <!-- Toggle Oficial / Operacional -->
+    <section style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:{{ toggleContainerBg }};border:1px solid {{ toggleContainerBorder }};border-radius:16px;padding:0 16px;height:50px;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="font-family:inherit;font-size:12.5px;font-weight:700;color:{{ oficialLabelColor }}">Oficial</span>
+          <button onClick="{{ toggleModo }}" disabled="{{ modoOperacionalDisabled }}" title="Alternar entre Oficial e Operacional" style="position:relative;width:42px;height:23px;border-radius:999px;border:none;cursor:pointer;background:{{ switchTrackBg }};padding:0;flex-shrink:0;opacity:{{ modoOperacionalOpacity }}">
+            <span style="position:absolute;top:2px;left:{{ switchThumbLeft }};width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(11,23,51,.3);transition:left .15s ease"></span>
+          </button>
+          <span style="font-family:inherit;font-size:12.5px;font-weight:700;color:{{ operacionalLabelColor }}">Operacional</span>
+        </div>
+        <sc-if value="{{ modoOperacionalAtivo }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:6px;font-size:14px;color:#8A5A00;background:#FFF6E0;border:1px solid #F5DFA0;border-radius:8px;padding:6px 10px">
+            <span style="font-weight:700">Prévia:</span> mostrando como ficaria a segmentação se o mês fechasse hoje. Não é o dado oficial — pode mudar até o fechamento.
+          </div>
+        </sc-if>
       </div>
+    </section>
+
+    <!-- Critérios por cluster (só em modo Oficial) -->
+    <sc-if value="{{ modoOficialAtivo }}" hint-placeholder-val="{{ true }}">
+    <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:20px 22px;margin-bottom:18px">
+      <div class="lbr-expand-header" onClick="{{ toggleCriteriaCardsPanel }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:{{ criteriaCardsHeaderMargin }};padding:8px;margin-left:-8px;margin-right:-8px;margin-top:-8px;border-radius:12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:26px;height:26px;border-radius:8px;background:#eef1fe;color:#2850EF;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
+          </span>
+          <div>
+            <h3 style="font-size: 16px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: .05em; color: #0B1733">CRITÉRIOS DEFINIDOS POR SEGMENTO</h3>
+            <div style="font-size:11.5px;color:#8A94AD;margin-top:2px;text-transform:none;letter-spacing:normal;font-weight:400">Confira os critérios e valores mínimos de cada segmento de cliente.</div>
+          </div>
+        </div>
+        <span style="font-family:inherit;font-size:11.5px;font-weight:700;color:#0B1733;background:#fff;border:1px solid #dde1ee;border-radius:8px;padding:7px 11px;white-space:nowrap;flex-shrink:0">{{ criteriaCardsToggleLabel }}</span>
+      </div>
+      <sc-if value="{{ criteriaCardsOpen }}" hint-placeholder-val="{{ true }}">
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
         <sc-for list="{{ rules }}" as="r" hint-placeholder-count="5">
           <div style="border:1px solid {{ r.border }};border-radius:12px;padding:13px 14px;background:{{ r.bgsoft }}">
@@ -87,21 +121,24 @@
           </div>
         </sc-for>
       </div>
+      </sc-if>
       <div style="margin-top:16px;padding-top:14px;border-top:1px solid #eef0f7">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:{{ criteriaBodyMargin }}">
+        <div class="lbr-expand-header" onClick="{{ toggleCriteriaPanel }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:{{ criteriaBodyMargin }};padding:8px;margin-left:-8px;margin-right:-8px;margin-top:-8px;border-radius:12px">
           <div>
-            <div style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:#6A748F;text-transform:uppercase;letter-spacing:.06em">
-              <span style="width:22px;height:22px;border-radius:7px;background:#eef1fe;color:#2850EF;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7"></path><path d="M4 10V3"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M20 21v-5"></path><path d="M20 12V3"></path><path d="M2 14h4"></path><path d="M10 8h4"></path><path d="M18 16h4"></path></svg>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="width:26px;height:26px;border-radius:7px;background:#eef1fe;color:#2850EF;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7"></path><path d="M4 10V3"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M20 21v-5"></path><path d="M20 12V3"></path><path d="M2 14h4"></path><path d="M10 8h4"></path><path d="M18 16h4"></path></svg>
               </span>
-              <span>Simulação temporária</span>
+              <div>
+                <div style="font-size:11px;font-weight:800;color:#6A748F;text-transform:uppercase;letter-spacing:.05em">Simulação temporária</div>
+                <div style="font-size:11.5px;color:#8A94AD;margin-top:2px">Altere os critérios e a coluna "Segmentação (Simulação)" recalcula nesta tela. Ao atualizar a página, volta ao padrão.</div>
+              </div>
             </div>
-            <div style="font-size:11.5px;color:#8A94AD;margin-top:2px">Altere os critérios e a coluna "Segmentação (Simulação)" recalcula nesta tela. Ao atualizar a página, volta ao padrão.</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px">
-            <button onClick="{{ toggleCriteriaPanel }}" style="font-family:inherit;font-size:11.5px;font-weight:700;color:#0B1733;background:#fff;border:1px solid #dde1ee;border-radius:8px;padding:7px 11px;cursor:pointer;white-space:nowrap">{{ criteriaToggleLabel }}</button>
+            <span style="font-family:inherit;font-size:11.5px;font-weight:700;color:#0B1733;background:#fff;border:1px solid #dde1ee;border-radius:8px;padding:7px 11px;white-space:nowrap">{{ criteriaToggleLabel }}</span>
             <sc-if value="{{ criteriaOpen }}" hint-placeholder-val="{{ true }}">
-              <button onClick="{{ resetCriteria }}" style="font-family:inherit;font-size:11.5px;font-weight:700;color:#2850EF;background:#eef1fe;border:none;border-radius:8px;padding:7px 11px;cursor:pointer;white-space:nowrap">Restaurar padrão</button>
+              <button onClick="{{ resetCriteria }}" style="font-family:inherit;font-size:11.5px;font-weight:700;color:#2850EF;background:#eef1fe;border:none;border-radius:8px;padding:7px 11px;cursor:pointer;white-space:nowrap;position:relative;z-index:1">Restaurar padrão</button>
             </sc-if>
           </div>
         </div>
@@ -132,6 +169,7 @@
         </sc-if>
       </div>
     </section>
+    </sc-if>
 
     <!-- Cards de resumo -->
     <section style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px">
@@ -149,9 +187,9 @@
           <div style="margin-top:13px;padding-top:12px;border-top:1px solid rgba(11,23,51,0.07)">
             <div style="display:flex;align-items:center;gap:7px;font-size:11px">
               <div class="lbr-window-tip" style="width:82px;color:#6A748F;flex-shrink:0;font-weight:500;position:relative;cursor:help">
-                J1 - Atual
+                {{ c.j1Label }}
                 <div class="lbr-window-pop" style="display:none;position:absolute;left:0;bottom:20px;z-index:20;width:210px;background:#fff;border:1px solid #dfe3ef;border-radius:12px;box-shadow:0 14px 34px rgba(11,23,51,.16);padding:10px 12px">
-                  <div style="font-size:10.5px;font-weight:800;color:#0B1733;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">J1 - Atual</div>
+                  <div style="font-size:10.5px;font-weight:800;color:#0B1733;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">{{ c.j1Label }}</div>
                   <div style="font-size:11px;color:#6A748F;line-height:1.3">{{ c.j1Period }}</div>
                 </div>
               </div>
@@ -161,9 +199,9 @@
             <sc-if value="{{ c.trendMeaningful }}" hint-placeholder-val="{{ true }}">
               <div style="display:flex;align-items:center;gap:7px;margin-top:7px;font-size:11px">
                 <div class="lbr-window-tip" style="width:82px;color:#6A748F;flex-shrink:0;font-weight:500;position:relative;cursor:help">
-                  J2 - Anterior
+                  {{ c.j2Label }}
                   <div class="lbr-window-pop" style="display:none;position:absolute;left:0;bottom:20px;z-index:20;width:210px;background:#fff;border:1px solid #dfe3ef;border-radius:12px;box-shadow:0 14px 34px rgba(11,23,51,.16);padding:10px 12px">
-                    <div style="font-size:10.5px;font-weight:800;color:#0B1733;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">J2 - Anterior</div>
+                    <div style="font-size:10.5px;font-weight:800;color:#0B1733;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">{{ c.j2Label }}</div>
                     <div style="font-size:11px;color:#6A748F;line-height:1.3">{{ c.j2Period }}</div>
                   </div>
                 </div>
@@ -189,7 +227,7 @@
         <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Buscar cliente</label>
         <div style="position:relative">
           <svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa3bd" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
-          <input value="{{ q.search }}" onInput="{{ onSearch }}" placeholder="Nome ou ID do cliente…" style="font-family:inherit;font-size:13px;padding:9px 12px 9px 32px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none">
+          <input value="{{ q.search }}" onInput="{{ onSearch }}" placeholder="Nome, ID, CNPJ ou Coligada…" style="font-family:inherit;font-size:13px;padding:9px 12px 9px 32px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none">
         </div>
       </div>
       <div style="flex:1;min-width:150px">
@@ -207,13 +245,13 @@
         </div>
       </sc-if>
       <div style="flex:1;min-width:150px">
-        <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Direção (J2 → J1)</label>
+        <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Direção ({{ direcaoLabel }})</label>
         <select value="{{ q.fDir }}" onChange="{{ onFDir }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
           <option value="">Todos</option><option value="up">Subiu de segmento</option><option value="down">Desceu de segmento</option><option value="eq">Sem mudança</option>
         </select>
       </div>
       <div style="flex:1;min-width:180px">
-        <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Critério da mudança (J2 → J1)</label>
+        <label style="font-size:10.5px;color:#6A748F;display:block;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Critério da mudança ({{ direcaoLabel }})</label>
         <select value="{{ q.fReason }}" onChange="{{ onFReason }}" style="font-family:inherit;font-size:13px;padding:9px 11px;border-radius:9px;border:1px solid #dde1ee;background:#fff;color:#0B1733;width:100%;outline:none;cursor:pointer">
           <option value="">Todos</option><option value="fm">Faturamento</option><option value="mg">Cash Margin</option><option value="sk">Média SKUs</option><option value="mc">Meses c/ compra</option><option value="multi">Mais de um critério</option>
         </select>
@@ -271,9 +309,9 @@
           </colgroup>
           <thead>
             <tr style="background:#fafbfe">
-              <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:center;padding:13px 14px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Segmentação</span><span style="display:{{ segmentHeaderSubDisplay }};margin-top:2px">(Padrão)</span></th>
+              <th class="lbr-badge-cell" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:center;padding:13px 14px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Segmentação</span><span style="display:{{ segmentHeaderSubDisplay }};margin-top:2px">(Padrão)</span></th>
               <sc-if value="{{ simulationActive }}" hint-placeholder-val="{{ false }}">
-                <th style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:center;padding:13px 14px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Segmentação</span><span style="display:block;margin-top:2px">(Simulação)</span></th>
+                <th class="lbr-badge-cell" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:center;padding:13px 14px;border-bottom:1px solid #eceef5;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em"><span style="display:block">Segmentação</span><span style="display:block;margin-top:2px">(Simulação)</span></th>
               </sc-if>
               <th onClick="{{ sortNo }}" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:left;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;cursor:pointer;text-transform:uppercase;letter-spacing:.04em"><span style="display:inline-flex;align-items:center;gap:3px">Cliente <span>{{ caretNo }}</span></span></th>
               <th onClick="{{ sortVd }}" style="font-size:10.5px;font-weight:700;color:#6A748F;text-align:left;padding:13px 16px;border-bottom:1px solid #eceef5;white-space:nowrap;cursor:pointer;text-transform:uppercase;letter-spacing:.04em"><span style="display:inline-flex;align-items:center;gap:3px">Vendedor <span>{{ caretVd }}</span></span></th>
@@ -288,9 +326,9 @@
           <tbody>
             <sc-for list="{{ pageRows }}" as="r" hint-placeholder-count="12">
               <tr style="border-bottom:1px solid #f1f3f9">
-                <td style="padding:11px 12px;white-space:nowrap;text-align:center"><span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:{{ r.naBg }};color:{{ r.naTxt }}">{{ r.na }}</span></td>
+                <td class="lbr-badge-cell" style="padding:11px 12px;white-space:nowrap;text-align:center"><span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:{{ r.naBg }};color:{{ r.naTxt }}">{{ r.na }}</span></td>
                 <sc-if value="{{ simulationActive }}" hint-placeholder-val="{{ false }}">
-                  <td style="padding:11px 12px;white-space:nowrap;text-align:center"><span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:{{ r.criBg }};color:{{ r.criTxt }}">{{ r.cri }}</span></td>
+                  <td class="lbr-badge-cell" style="padding:11px 12px;white-space:nowrap;text-align:center"><span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:{{ r.criBg }};color:{{ r.criTxt }}">{{ r.cri }}</span></td>
                 </sc-if>
                 <td style="padding:11px 16px;white-space:nowrap">
                   <div style="font-weight:600;color:#0B1733">{{ r.no }}</div>
@@ -339,7 +377,7 @@
 
     <!-- Critério com mais impacto -->
     <section style="background:#fff;border:1px solid #e6e9f2;border-radius:16px;padding:20px 22px;margin-bottom:18px">
-      <h3 style="font-size:16px;font-weight:700;margin:0 0 4px;text-transform:uppercase;letter-spacing:.05em;color:#0B1733">Critério com mais impacto (J2 → J1)</h3>
+      <h3 style="font-size:16px;font-weight:700;margin:0 0 4px;text-transform:uppercase;letter-spacing:.05em;color:#0B1733">Critério com mais impacto ({{ direcaoLabel }})</h3>
       <div style="font-size:11.5px;color:#8A94AD;margin-bottom:16px">Entre os {{ vendCountLabel }} clientes que mudaram de segmento na última janela fechada, participação de cada critério na mudança.</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <sc-for list="{{ criteriaImpact }}" as="ci" hint-placeholder-count="5">
@@ -417,7 +455,7 @@
               </div>
               <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
                 <sc-for list="{{ trendLevels }}" as="l" hint-placeholder-count="7">
-                  <div style="text-align:center;min-width:0">
+                  <div style="text-align:center;min-width:0;background:{{ l.colBg }};border:{{ l.colBorder }};border-radius:8px;padding:4px 3px">
                     <div style="font-size:10px;color:#8A94AD;font-weight:800;margin-bottom:5px">{{ l.j }}</div>
                     <span style="display:inline-block;max-width:100%;padding:4px 8px;border-radius:7px;font-size:10.5px;font-weight:800;line-height:1.1;background:{{ l.bg }};color:{{ l.txt }}">{{ l.level }}</span>
                   </div>
@@ -425,7 +463,7 @@
               </div>
               <div style="margin-top:10px;padding-top:10px;border-top:1px solid #eceef5;display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
                 <sc-for list="{{ windowLegend }}" as="w" hint-placeholder-count="7">
-                  <div style="text-align:center;min-width:0;font-size:10px;line-height:1.2;color:#6A748F">
+                  <div style="text-align:center;min-width:0;font-size:10px;line-height:1.2;color:#6A748F;background:{{ w.bg }};border:{{ w.border }};border-radius:8px;padding:4px 3px">
                     <div style="font-weight:800;color:#0B1733">{{ w.short }}</div>
                     <div>{{ w.period }}</div>
                   </div>
@@ -454,7 +492,7 @@
                       </span>
                     </div>
                   </div>
-                  <div style="font-size:11px;font-weight:800;color:{{ g.deltaColor }};white-space:nowrap"><span style="color:#8A94AD">J1 vs J2:</span> {{ g.delta }}</div>
+                  <div style="font-size:11px;font-weight:800;color:{{ g.deltaColor }};white-space:nowrap"><span style="color:#8A94AD">{{ j1VsJ2Label }}:</span> {{ g.delta }}</div>
                 </div>
                 <div style="position:relative;height:158px">
                   <svg viewBox="0 0 520 108" style="width:100%;height:124px;display:block;overflow:visible">
@@ -462,7 +500,7 @@
                     <polyline points="{{ g.grid2 }}" fill="none" stroke="#eef1f7" stroke-width="1"></polyline>
                     <polyline points="{{ g.points }}" fill="none" stroke="{{ g.color }}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"></polyline>
                     <sc-for list="{{ g.dots }}" as="d" hint-placeholder-count="7">
-                      <circle cx="{{ d.x }}" cy="{{ d.y }}" r="3.4" fill="#fff" stroke="{{ g.color }}" stroke-width="1.9"></circle>
+                      <circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ d.r }}" fill="#fff" stroke="{{ d.stroke }}" stroke-width="{{ d.strokeWidth }}"></circle>
                     </sc-for>
                   </svg>
                   <sc-for list="{{ g.values }}" as="v" hint-placeholder-count="7">
@@ -472,7 +510,7 @@
                     </div>
                   </sc-for>
                   <sc-for list="{{ g.labels }}" as="l" hint-placeholder-count="7">
-                    <div style="position:absolute;left:{{ l.left }};top:{{ l.top }};transform:translate(-50%,0);font-size:10px;font-weight:800;color:#8A94AD;line-height:1;white-space:nowrap;background:#fafbfe;padding:1px 3px;border-radius:4px">{{ l.t }}</div>
+                    <div style="position:absolute;left:{{ l.left }};top:{{ l.top }};transform:translate(-50%,0);font-size:10px;font-weight:800;color:#8A94AD;line-height:1;white-space:nowrap;background:{{ l.bg }};padding:1px 3px;border-radius:4px;border:{{ l.border }}">{{ l.t }}</div>
                   </sc-for>
                   <sc-for list="{{ g.segments }}" as="s" hint-placeholder-count="7">
                     <div style="position:absolute;left:{{ s.left }};top:{{ s.top }};transform:translate(-50%,0);min-width:16px;height:16px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;background:{{ s.bg }};color:{{ s.txt }};border:{{ s.border }}">{{ s.initial }}</div>
@@ -506,7 +544,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1340,&quot;height&quot;:900}}">
 class Component extends DCLogic {
-  state = { view:'geral', search:'', fAutoNoSku:'', fAtual:'', fDir:'', fReason:'', fVend:'', sortCol:'fm', sortDir:-1, vendSortCol:'total', vendSortDir:-1, page:0, sourceLabel:'Carregando fonte de dados...', sourceIsError:false, criteria:null, criteriaOpen:false, trendRow:null, dashboardVisible:false, noAccess:false };
+  state = { view:'geral', search:'', fAutoNoSku:'', fAtual:'', fDir:'', fReason:'', fVend:'', sortCol:'fm', sortDir:-1, vendSortCol:'total', vendSortDir:-1, page:0, sourceLabel:'Carregando fonte de dados...', sourceIsError:false, criteria:null, criteriaOpen:false, criteriaCardsOpen:false, trendRow:null, dashboardVisible:false, noAccess:false, dataMode:'oficial', operacionalReady:false };
 
   PER = 30;
   ORDER = {DIAMOND:4,PLATINUM:3,GOLD:2,STANDARD:1,'SEM SEGMENTAÇÃO':0};
@@ -518,7 +556,45 @@ class Component extends DCLogic {
   LEVELS = ['STANDARD','GOLD','PLATINUM','DIAMOND'];
   DEFAULT_CRITERIA = {DIAMOND:{fm:350000,mg:135000,mc:10,sk:7},PLATINUM:{fm:25000,mg:6300,mc:9,sk:5},GOLD:{fm:9500,mg:2300,mc:6,sk:3}};
 
-  get data(){ return (window.LABOR_DASH || {RAW:[],COUNTS:{auto:{},autoNoSku:{},atual:{},total:0}}); }
+  get data(){
+    const base = window.LABOR_DASH || {RAW:[],COUNTS:{auto:{},autoNoSku:{},atual:{},total:0}};
+    if(this.state.dataMode !== 'operacional' || !window.LABOR_DASH_OPERACIONAL) return base;
+    const byId = window.LABOR_DASH_OPERACIONAL.byId || {};
+    // Em modo operacional, a "janela atual" vira a previa de hoje e a "janela
+    // anterior" (J2) vira o que hoje e o ultimo fechamento oficial (J1 oficial) -
+    // desloca a serie de janelas uma posicao pra frente pra manter o espacamento
+    // mensal coerente na comparacao (em vez de comparar contra o J2 oficial, que
+    // ficaria 2 meses atras da previa de hoje).
+    const shift = (arr, novo) => [novo, ...(arr || []).slice(0, 6)];
+    const RAW = base.RAW.map(r=>{
+      const op = byId[r.id];
+      if(!op) return r;
+      return Object.assign({}, r, {
+        fm: op.fm, mg: op.mg, mb: op.mb, sk: op.sk, mc: op.mc,
+        fms: shift(r.fms, op.fm),
+        mgs: shift(r.mgs, op.mg),
+        mcs: shift(r.mcs, op.mc),
+        sks: shift(r.sks, op.sk),
+        mbs: shift(r.mbs, op.mb)
+      });
+    });
+    // Clientes que so existem na janela operacional (ex: primeira compra este mes,
+    // sem nenhuma atividade no fechamento oficial) nao estao em base.RAW - entram
+    // como linhas novas, sem historico (janelas 2-7 zeradas, ja que nao existiam).
+    const idsOficiais = new Set(base.RAW.map(r => r.id));
+    const zeros = [0,0,0,0,0,0,0];
+    const novos = Object.values(byId)
+      .filter(op => !idsOficiais.has(op.id))
+      .map(op => ({
+        id: op.id, col: op.col, cnpj: op.cnpj, no: op.no, vd: op.vd,
+        fm: op.fm, mg: op.mg, mb: op.mb, sk: op.sk, mc: op.mc,
+        fms: [op.fm, ...zeros.slice(1)], mgs: [op.mg, ...zeros.slice(1)],
+        mcs: [op.mc, ...zeros.slice(1)], sks: [op.sk, ...zeros.slice(1)], mbs: [op.mb, ...zeros.slice(1)],
+        fm7:0, mg7:0, m7:0, sk7:0, mb7:0
+      }));
+    const RAW_TOTAL = RAW.concat(novos);
+    return Object.assign({}, base, { RAW: RAW_TOTAL, COUNTS: Object.assign({}, base.COUNTS, {total: RAW_TOTAL.length}) });
+  }
 
   fmtBRL(v){ return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}).format(v||0); }
   fmtInt(v){ return new Intl.NumberFormat('pt-BR').format(v||0); }
@@ -527,7 +603,12 @@ class Component extends DCLogic {
 
   matchesFilters(r, s, includeAtual){
     const q = s.search.toLowerCase();
-    if(q && !r.no.toLowerCase().includes(q) && !r.id.includes(q)) return false;
+    if(q){
+      const qDigits = q.replace(/\D/g, '');
+      const matchesTexto = r.no.toLowerCase().includes(q) || r.id.includes(q) || (r.col || '').includes(q) || (r.cnpj || '').includes(q);
+      const matchesDigitos = qDigits && ((r.cnpj || '').includes(qDigits) || r.id.includes(qDigits) || (r.col || '').includes(qDigits));
+      if(!matchesTexto && !matchesDigitos) return false;
+    }
     if(s.fAutoNoSku && this.criterioCriado(r)!==s.fAutoNoSku) return false;
     if(includeAtual && s.fAtual && this.criterioPadrao(r)!==s.fAtual) return false;
     if(s.fVend && r.vd!==s.fVend) return false;
@@ -565,8 +646,11 @@ class Component extends DCLogic {
     const j2Counts = this.LEVELS.reduce((acc,l)=>({...acc,[l]:0}),{});
     cardRows.forEach(r=>{ const l = this.criterioJ2(r); j2Counts[l] = (j2Counts[l] || 0) + 1; });
     const windows = this.windowLegend();
-    const j1Period = windows.find(w => w.short === 'J1')?.period || '';
-    const j2Period = windows.find(w => w.short === 'J2')?.period || '';
+    const isOperacional = this.state.dataMode === 'operacional';
+    const j1Period = isOperacional ? this.operacionalPeriod() : (windows.find(w => w.short === 'J1')?.period || '');
+    const j2Period = isOperacional ? (windows.find(w => w.short === 'J1')?.period || '') : (windows.find(w => w.short === 'J2')?.period || '');
+    const j1Label = isOperacional ? 'Hoje (prévia)' : 'J1 - Atual';
+    const j2Label = isOperacional ? 'Último fechado' : 'J2 - Anterior';
     const rules = [
       {label:'STANDARD', items:[{k:'Faturamento Médio',v:'—'},{k:'Cash Margin Média',v:'—'},{k:'Média SKUs',v:'—'},{k:'Meses c/ compra',v:'—'}]},
       {label:'GOLD', items:[{k:'Faturamento Médio',v:'≥ '+this.fmtBRL(crit.GOLD.fm)},{k:'Cash Margin Média',v:'≥ '+this.fmtBRL(crit.GOLD.mg)},{k:'Média SKUs',v:'≥ '+crit.GOLD.sk},{k:'Meses c/ compra',v:'≥ '+crit.GOLD.mc}]},
@@ -594,10 +678,12 @@ class Component extends DCLogic {
         auto, atual, autoNoSku, j2, trendMeaningful,
         chegaram, sairam,
         flowLabel: this.fmtInt(chegaram) + ' chegaram · ' + this.fmtInt(sairam) + ' saíram',
-        deltaLabel: this.deltaLabel(atual, j2, 'J2'),
+        deltaLabel: this.deltaLabel(atual, j2, isOperacional ? 'último fechado' : 'J2'),
         deltaColor: this.deltaColor(atual, j2),
         j1Period,
         j2Period,
+        j1Label,
+        j2Label,
         autoW: Math.round((auto/mx)*100)+'%',
         atualW: Math.round((atual/mx)*100)+'%',
         autoNoSkuW: Math.round((autoNoSku/mx)*100)+'%',
@@ -671,10 +757,33 @@ class Component extends DCLogic {
       rules, cards, criteriaRows, vendedores,
       simulationActive,
       segmentHeaderSubDisplay: simulationActive ? 'block' : 'none',
+      modoOficialAtivo: this.state.dataMode === 'oficial',
+      modoOperacionalAtivo: this.state.dataMode === 'operacional',
+      toggleContainerBg: this.state.dataMode === 'operacional' ? '#FFFBEB' : '#fff',
+      toggleContainerBorder: this.state.dataMode === 'operacional' ? '#F5DFA0' : '#e6e9f2',
+      modoOperacionalDisabled: !this.state.operacionalReady,
+      modoOperacionalOpacity: this.state.operacionalReady ? '1' : '.5',
+      switchTrackBg: this.state.dataMode === 'operacional' ? '#E8A400' : '#dde1ee',
+      switchThumbLeft: this.state.dataMode === 'operacional' ? '21px' : '2px',
+      oficialLabelColor: this.state.dataMode === 'oficial' ? '#0B1733' : '#8A94AD',
+      operacionalLabelColor: this.state.dataMode === 'operacional' ? '#8A5A00' : '#8A94AD',
+      toggleModo: ()=> {
+        if(this.state.dataMode === 'oficial'){
+          if(this.state.operacionalReady) this.setState({dataMode:'operacional'});
+        } else {
+          this.setState({dataMode:'oficial'});
+        }
+      },
+      j1VsJ2Label: this.state.dataMode === 'operacional' ? 'Hoje vs último fechado' : 'J1 vs J2',
+      direcaoLabel: this.state.dataMode === 'operacional' ? 'Último fechado → Hoje' : 'J2 → J1',
       criteriaOpen: this.state.criteriaOpen,
       criteriaToggleLabel: this.state.criteriaOpen ? 'Recolher' : 'Expandir',
       criteriaBodyMargin: this.state.criteriaOpen ? '10px' : '0',
       toggleCriteriaPanel: ()=> this.setState({criteriaOpen:!this.state.criteriaOpen}),
+      criteriaCardsOpen: this.state.criteriaCardsOpen,
+      criteriaCardsToggleLabel: this.state.criteriaCardsOpen ? 'Recolher' : 'Expandir',
+      criteriaCardsHeaderMargin: this.state.criteriaCardsOpen ? '16px' : '0px',
+      toggleCriteriaCardsPanel: ()=> this.setState({criteriaCardsOpen:!this.state.criteriaCardsOpen}),
       viewGeral: !isVendedorView,
       viewVendedor: isVendedorView,
       goToGeral: ()=> this.setState({view:'geral'}),
@@ -725,7 +834,7 @@ class Component extends DCLogic {
       onFVend: (e)=> this.setFilter({fVend:e.target.value}),
       hasActiveFilter: !!(this.state.search||this.state.fAutoNoSku||this.state.fAtual||this.state.fDir||this.state.fReason||this.state.fVend),
       clearFilters: ()=> this.setState({search:'',fAutoNoSku:'',fAtual:'',fDir:'',fReason:'',fVend:'',page:0}),
-      resetCriteria: ()=> this.setState({criteria:null, fAutoNoSku:'', page:0}),
+      resetCriteria: (e)=> { e.stopPropagation(); this.setState({criteria:null, fAutoNoSku:'', page:0}); },
       trendOpen: !!this.state.trendRow,
       trendTitle: this.state.trendRow ? this.state.trendRow.no : '',
       trendSubtitle: this.state.trendRow ? (this.state.trendRow.id + (this.state.trendRow.col ? ' · col. ' + this.state.trendRow.col : '') + (this.state.trendRow.vd ? ' · ' + this.state.trendRow.vd : '')) : '',
@@ -736,7 +845,8 @@ class Component extends DCLogic {
       trendCards: this.trendCards(this.state.trendRow),
       windowLegend: this.windowLegend(),
       windowLegendAsc: this.windowLegendAsc(),
-      analysisPeriod: this.windowLegend().find(w => w.short === 'J1')?.period || 'últimos 12 meses fechados',
+      analysisPeriod: this.state.dataMode === 'operacional' ? this.operacionalPeriod() : (this.windowLegend().find(w => w.short === 'J1')?.period || 'últimos 12 meses fechados'),
+      analysisPeriodLabel: this.state.dataMode === 'operacional' ? 'Período: prévia operacional' : 'Período: últimos 12 meses fechados',
       closeTrend: ()=> this.setState({trendRow:null}),
       stopClick: (e)=> e.stopPropagation(),
       countLabel: this.fmtInt(rowsAll.length),
@@ -858,29 +968,44 @@ class Component extends DCLogic {
     const mbs = (r.mbs || []).slice().reverse();
     const sks = (r.sks || []).slice().reverse();
     const mcs = (r.mcs || []).slice().reverse();
+    const isOperacional = this.state.dataMode === 'operacional';
     return fms.map((fm, i)=>{
       const level = this.criterioPorValores(fm, mgs[i], mbs[i], mcs[i], sks[i]);
+      const isPrevia = isOperacional && i === fms.length - 1;
       return {
         j:'J' + (7 - i),
         level,
         bg:this.BG[level],
-        txt:this.TXT[level]
+        txt:this.TXT[level],
+        colBorder: isPrevia ? '1px solid #E8A400' : '1px solid transparent',
+        colBg: isPrevia ? '#FFF6E0' : 'transparent'
       };
     });
   }
 
   windowLegend(){
+    const isOperacional = this.state.dataMode === 'operacional';
     const today = new Date();
     const base = new Date(today.getFullYear(), today.getMonth(), 0);
     return Array.from({length:7}, (_, i)=>{
       const n = 7 - i;
-      const offset = n - 1;
+      if(isOperacional && n === 1){
+        return {
+          short:'J1', label:'Hoje (prévia)', period: this.operacionalPeriod(),
+          isPrevia:true, bg:'#FFF6E0', border:'1px solid #E8A400'
+        };
+      }
+      // Em modo operacional, a posicao J1 vira a previa de hoje, entao o resto da
+      // serie (J2..J7) desliza uma posicao pra frente (J2 passa a ser o antigo J1,
+      // e assim por diante), igual ja fazemos com os valores em get data().
+      const offset = isOperacional ? n - 2 : n - 1;
       const start = new Date(base.getFullYear(), base.getMonth() - 11 - offset, 1);
       const end = new Date(base.getFullYear(), base.getMonth() - offset + 1, 0);
       return {
         short:'J' + n,
         label:'Janela ' + n,
-        period:this.monthYear(start) + ' a ' + this.monthYear(end)
+        period:this.monthYear(start) + ' a ' + this.monthYear(end),
+        isPrevia:false, bg:'transparent', border:'1px solid transparent'
       };
     });
   }
@@ -894,9 +1019,17 @@ class Component extends DCLogic {
     return months[date.getMonth()] + '/' + String(date.getFullYear()).slice(-2);
   }
 
+  operacionalPeriod(){
+    const today = new Date();
+    const start = new Date(today.getFullYear(), today.getMonth() - 11, 1);
+    return this.monthYear(start) + ' a ' + this.monthYear(today) + ' (parcial, até hoje)';
+  }
+
   chartCard(title, values, type, color, metric, options = {}){
+    const isOperacional = this.state.dataMode === 'operacional';
     const vals = (values || []).slice().reverse();
     const clean = vals.map(v => Number(v) || 0);
+    const lastIdx = clean.length - 1;
     const subVals = (options.subValues || []).slice().reverse();
     const max = Math.max(...clean, 1);
     const min = Math.min(...clean, 0);
@@ -904,7 +1037,15 @@ class Component extends DCLogic {
     const xs = clean.map((_, i) => 36 + i * 74.67);
     const ys = clean.map(v => 86 - ((v - min) / span) * 52);
     const points = xs.map((x, i) => x.toFixed(1) + ',' + ys[i].toFixed(1)).join(' ');
-    const dots = xs.map((x, i) => ({x:x.toFixed(1), y:ys[i].toFixed(1)}));
+    const dots = xs.map((x, i) => {
+      const isPrevia = isOperacional && i === lastIdx;
+      return {
+        x:x.toFixed(1), y:ys[i].toFixed(1),
+        r: isPrevia ? 5.5 : 3.4,
+        stroke: isPrevia ? '#E8A400' : color,
+        strokeWidth: isPrevia ? 2.6 : 1.9
+      };
+    });
     const valueLabels = xs.map((x, i) => ({
       x:x.toFixed(1),
       y:Math.max(12, ys[i] - 8).toFixed(1),
@@ -915,12 +1056,17 @@ class Component extends DCLogic {
       subDisplay:options.subValues ? 'block' : 'none'
     }));
     const valueList = clean.map((v, i) => ({j:'J' + (7 - i), t:this.compactMetric(v, type)}));
-    const labels = xs.map((x, i) => ({
-      x:x.toFixed(1),
-      left:(x / 520 * 100).toFixed(2) + '%',
-      top:'76%',
-      t:'J' + (7 - i)
-    }));
+    const labels = xs.map((x, i) => {
+      const isPrevia = isOperacional && i === lastIdx;
+      return {
+        x:x.toFixed(1),
+        left:(x / 520 * 100).toFixed(2) + '%',
+        top:'76%',
+        t:'J' + (7 - i),
+        bg: isPrevia ? '#FFF6E0' : '#fafbfe',
+        border: isPrevia ? '1px solid #E8A400' : '1px solid transparent'
+      };
+    });
     const segments = xs.map((x, i) => {
       const level = this.metricSegment(clean[i], metric);
       const inactive = this.metricCriteriaInactive(metric);
@@ -1153,6 +1299,11 @@ class Component extends DCLogic {
       done((meta.source || 'Fonte de dados') + ' · ' + this.fmtInt(total) + ' clientes');
       this.setState({dashboardVisible:true});
     };
+    if(window.LABOR_DASH_OPERACIONAL_READY){
+      window.LABOR_DASH_OPERACIONAL_READY.then((op)=>{
+        if(op) this.setState({operacionalReady:true});
+      }).catch(()=>{});
+    }
     if(window.LABOR_DASH){ markLoaded(); return; }
     if(window.LABOR_DASH_READY){
       window.LABOR_DASH_READY.then(()=>markLoaded()).catch(err=>{

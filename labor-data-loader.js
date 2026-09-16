@@ -31,6 +31,7 @@
       return {
         id: String(row['d_Cliente[ID Cliente]'] || '').trim(),
         col: String(row['d_Cliente[Coligada]'] || '').trim(),
+        cnpj: String(row['d_Cliente[CNPJ Cliente]'] || '').trim(),
         no: String(row['d_Cliente[Nome Fantasia]'] || '').trim(),
         vd: String(row['d_Cliente[Nome Vendedor Proper]'] || '').trim(),
         fm: fms[0], fm7: fms[6], fms,
@@ -66,4 +67,46 @@
     };
     document.head.appendChild(script);
   });
+
+  // Dados operacionais (prev` opcional: previa do mes em andamento, calculada com
+  // janela dinamica ate hoje). So carrega se a pagina definir a URL; se nao definir,
+  // resolve como null sem gerar erro (recurso opcional, nao trava o dashboard oficial).
+  const operacionalUrl = window.LABOR_DASH_OPERACIONAL_SCRIPT_URL || null;
+
+  function transformOperacionalRows(rawRows){
+    const byId = {};
+    rawRows.forEach(row => {
+      const id = String(row['d_Cliente[ID Cliente]'] || '').trim();
+      if(!id) return;
+      const fm = num(row['[Faturamento_Operacional]']);
+      const mg = num(row['[Margem_Operacional]']);
+      byId[id] = {
+        id,
+        col: String(row['d_Cliente[Coligada]'] || '').trim(),
+        cnpj: String(row['d_Cliente[CNPJ Cliente]'] || '').trim(),
+        no: String(row['d_Cliente[Nome Fantasia]'] || '').trim(),
+        vd: String(row['d_Cliente[Nome Vendedor Proper]'] || '').trim(),
+        fm, mg,
+        mb: fm > 0 ? (mg / fm) * 100 : 0,
+        sk: num(row['[SKU_Operacional]']),
+        mc: num(row['[Meses_Operacional]'])
+      };
+    });
+    return { byId };
+  }
+
+  window.LABOR_DASH_OPERACIONAL_READY = operacionalUrl ? new Promise((resolve) => {
+    const opScriptUrl = operacionalUrl + (operacionalUrl.includes('?') ? '&' : '?') + 'v=' + Date.now();
+    const script = document.createElement('script');
+    script.src = opScriptUrl;
+    script.async = true;
+    script.onload = () => {
+      if(Array.isArray(window.LABOR_DASH_OPERACIONAL_ROWS)){
+        window.LABOR_DASH_OPERACIONAL = transformOperacionalRows(window.LABOR_DASH_OPERACIONAL_ROWS);
+      }
+      resolve(window.LABOR_DASH_OPERACIONAL || null);
+    };
+    script.onerror = () => resolve(null);
+    document.head.appendChild(script);
+  }) : Promise.resolve(null);
 })();
