@@ -713,6 +713,20 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
 
   </sc-if>
 
+  <sc-if value="{{ showWelcome }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(11,23,51,.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:250">
+      <div style="background:#fff;border:1px solid #e4e8f4;border-radius:20px;max-width:420px;width:100%;padding:36px 32px;text-align:center;box-shadow:0 24px 64px rgba(11,23,51,.3)">
+        <div style="font-size:40px;margin-bottom:14px">👋</div>
+        <div style="font-size:19px;font-weight:800;color:#0B1733;margin-bottom:10px">Bem-vindo(a) ao Dashboard de Segmentação!</div>
+        <div style="font-size:13.5px;color:#6A748F;line-height:1.5;margin-bottom:24px">Preparamos um tour rápido mostrando os principais recursos da tela — leva menos de 1 minuto. Quer dar uma olhada?</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button onClick="{{ startTourFromWelcome }}" style="font-family:inherit;font-size:13px;font-weight:700;border-radius:10px;padding:10px 18px;cursor:pointer;border:1px solid #2850EF;background:#2850EF;color:#fff">Sim, fazer o tour</button>
+          <button onClick="{{ dismissWelcome }}" style="font-family:inherit;font-size:13px;font-weight:700;border-radius:10px;padding:10px 18px;cursor:pointer;border:1px solid #dde1ee;background:#fff;color:#0B1733">Agora não, obrigado</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
   <sc-if value="{{ noAccess }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;background:radial-gradient(120% 120% at 50% 0%, #EDF1FA 0%, #DEE4F2 100%);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100">
       <div style="background:#fff;border:1px solid #e4e8f4;border-radius:20px;max-width:440px;width:100%;padding:36px 32px;text-align:center;box-shadow:0 20px 60px rgba(11,23,51,.12)">
@@ -732,7 +746,7 @@ window.LABOR_DASH_OPERACIONAL_SCRIPT_URL = 'https://bunzlbr.sharepoint.com/:u:/r
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1340,&quot;height&quot;:900}}">
 class Component extends DCLogic {
-  state = { view:'geral', search:'', fAutoNoSku:'', fAtual:'', fDir:'', fReason:'', fVend:'', sortCol:'fm', sortDir:-1, vendSortCol:'total', vendSortDir:-1, page:0, sourceLabel:'Carregando fonte de dados...', sourceIsError:false, criteria:null, criteriaOpen:false, criteriaCardsOpen:false, trendRow:null, dashboardVisible:false, noAccess:false, dataMode:'oficial', operacionalReady:false, tSearch:'', tFDir:'', tFVend:'', tFMotivo:'', agrupamento:'coligada', tourActive:false, tourStep:0 };
+  state = { view:'geral', search:'', fAutoNoSku:'', fAtual:'', fDir:'', fReason:'', fVend:'', sortCol:'fm', sortDir:-1, vendSortCol:'total', vendSortDir:-1, page:0, sourceLabel:'Carregando fonte de dados...', sourceIsError:false, criteria:null, criteriaOpen:false, criteriaCardsOpen:false, trendRow:null, dashboardVisible:false, noAccess:false, dataMode:'oficial', operacionalReady:false, tSearch:'', tFDir:'', tFVend:'', tFMotivo:'', agrupamento:'coligada', tourActive:false, tourStep:0, showWelcome:false };
 
   TOUR_STEPS = [
     {target:'#tour-total', title:'Base de clientes', text:'Total de clientes ativos na base analisada. O número muda conforme o agrupamento escolhido (por cliente ou por Coligada).'},
@@ -1090,6 +1104,9 @@ class Component extends DCLogic {
       noAccess: this.state.noAccess,
       recarregarPagina: ()=> window.location.reload(),
       dismissNoAccess: ()=> this.setState({noAccess:false}),
+      showWelcome: this.state.showWelcome,
+      dismissWelcome: ()=> this.setState({showWelcome:false}),
+      startTourFromWelcome: ()=> { this.setState({showWelcome:false}); this.startTour(); },
       totalFmt: this.fmtInt(totalOficial),
       sourceLabel: this.state.sourceLabel,
       sourceColor: this.state.sourceIsError ? '#9C4A3A' : '#8A94AD',
@@ -1800,7 +1817,7 @@ class Component extends DCLogic {
       const meta = window.LABOR_DASH_META || {};
       const total = window.LABOR_DASH?.COUNTS?.total || 0;
       done((meta.source || 'Fonte de dados') + ' · ' + this.fmtInt(total) + ' clientes');
-      this.setState({dashboardVisible:true});
+      this.setState({dashboardVisible:true, showWelcome:true});
     };
     if(window.LABOR_DASH_OPERACIONAL_READY){
       window.LABOR_DASH_OPERACIONAL_READY.then((op)=>{
